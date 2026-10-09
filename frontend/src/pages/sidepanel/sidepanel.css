@@ -1,0 +1,3381 @@
+/* ===== TIPOGRAFÍA OFICIAL · ONE UI SANS ===== */
+@font-face {
+  font-family: "One UI Sans APP VF";
+  src: local("One UI Sans APP VF"), local("One UI Sans Variable"), local("One UI Sans");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+/* ===== TIPOGRAFIA · SAMSUNGONE ===== */
+@font-face {
+  font-family: "SamsungOne";
+  src: local("SamsungOne 400"), local("SamsungOne-400"), local("SamsungOne");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SamsungOne";
+  src: local("SamsungOne 700"), local("SamsungOne-700"), local("SamsungOne");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+/* MediaDrop · UI WINDOWS independiente */
+/* =========================================================
+   MEDIA DROP · MAPA DE CODIGO
+   01 CONSTANTES UNIVERSALES
+   02 BACKGROUND
+   03 ICONOS
+   04 DOCK IZQUIERDO
+   05 DOCK DERECHO
+   06 MEDIA BOX
+   07 MEDIA DESCRIPTION
+   08 MEDIA DOWNLOAD ICON
+   09 MENU DE SETTINGS
+   10 POPUP · VIDEO / FOTO / CONFIRMACION
+   11 ESTADOS · TOAST · EMPTY
+   12 ANIMACIONES · RESPONSIVE · ACCESIBILIDAD
+   ========================================================= */
+
+
+:root {
+  /* =========================================================
+     CONSTANTES UNIVERSALES · MEDIA DROP
+     Un valor compartido = una sola constante.
+     ========================================================= */
+
+  /* Ventana */
+  --popup-width: 378px;
+  --popup-height: 540px;
+
+  /* Regla universal de borde: UI = 12.6px.
+     Los efectos de fondo/blur son full-bleed y no usan este margen. */
+  --edge-gap: 12.6px;
+
+  /* Tamaños compartidos */
+  --dock-height: 52.2px;
+  --dock-right-width: 138.6px;
+  --dock-left-width: 95.4px;
+  --icon-size: 24px;
+
+  /* Redondez */
+  --radius-media-box: 17.1px;
+  --radius-popup: 25.2px;
+  --radius-pill: 899.1px;
+
+  /* =========================================================
+     PALETA UNIVERSAL · ONE UI 8.5 · DARK
+     Todos los componentes consumen estas constantes.
+     ========================================================= */
+  --md-bg: #080808;
+  --md-surface: #18181A;
+  --md-surface-secondary: #202124;
+  --md-dock-bg: var(--md-surface-secondary);
+  --md-dock-border: #353639;
+  --md-active-bg: #3A3B3E;
+  --md-text-primary: #F4F4F6;
+  --md-text-secondary: #AFB0B4;
+  --md-text-disabled: #77797E;
+  --md-icon-active: #F4F4F6;
+  --md-icon-inactive: #A1A3A8;
+  --md-icon-disabled: #686A6E;
+  --md-divider: #2A2B2E;
+  --md-accent: #1A73E8;
+  --md-on-accent: #FFFFFF;
+
+  color-scheme: dark;
+
+  /* =========================================================
+     MATERIAL UNIVERSAL
+     Conserva la regla de material existente: superficie al 80%
+     + backdrop blur/saturacion compartidos.
+     ========================================================= */
+  --shared-control-bg: color-mix(in srgb, var(--md-dock-bg) 80%, transparent);
+  --shared-control-border: 1px solid var(--md-dock-border);
+  --shared-control-shadow: 0 12.6px 30.6px var(--shadow-soft), inset 0 1px 0 var(--inset-highlight);
+
+  --control-blur: 16px;
+  --control-saturation: 115%;
+  --control-backdrop-filter: blur(var(--control-blur)) saturate(var(--control-saturation));
+
+  /* Backdrop universal de menus / fondos modales. */
+  --menu-blur: 12.8px;
+  --menu-saturation: 125%;
+  --menu-backdrop-filter: blur(var(--menu-blur)) saturate(var(--menu-saturation));
+  --menu-backdrop-tint: color-mix(in srgb, var(--md-bg) 10%, transparent);
+  --menu-backdrop-mask: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.03) 14%, rgba(0,0,0,.08) 28%, rgba(0,0,0,.16) 42%, rgba(0,0,0,.30) 58%, rgba(0,0,0,.52) 76%, rgba(0,0,0,.78) 90%, rgba(0,0,0,1) 100%);
+
+  /* Escala del menu de settings. */
+  --action-menu-scale: 1;
+  --menu-dock-gap: 8.4px;
+
+  /* Media box · geometria · One UI */
+  --media-card-radius: 21.6px;
+  --media-card-aspect-ratio: 1 / 1;
+  --media-card-border: var(--md-dock-border);
+  --media-grid-gap: 10.8px;
+  --media-list-radius: 28.8px;
+  --media-list-row-height: 64.8px;
+  --media-card-shadow: 0 4.5px 14.4px rgba(0,0,0,.16);
+  --media-info-dock-left: 0px;
+  --media-info-dock-right: 0px;
+  --media-info-dock-bottom: 0px;
+  --media-info-dock-padding-y: 10.8px;
+  --media-info-dock-padding-x: var(--edge-gap);
+  --media-info-dock-radius: 0px;
+  --media-info-dock-min-height: 54px;
+
+  /* Overlay de descripcion sobre media. Es un efecto, no una superficie de UI. */
+  --media-info-dock-muted: color-mix(in srgb, var(--md-on-accent) 78%, transparent);
+  --media-info-blur-overlay-start: rgba(0,0,0,0);
+  --media-info-blur-overlay-mid: rgba(0,0,0,.16);
+  --media-info-blur-overlay-end: rgba(0,0,0,.56);
+
+  /* =========================================================
+     ALIAS SEMANTICOS DE COMPATIBILIDAD
+     No contienen colores propios: todos apuntan a --md-*.
+     ========================================================= */
+  --bg: var(--md-bg);
+  --surface: var(--md-surface);
+  --surface-hover: var(--md-surface-secondary);
+  --surface-soft: var(--md-surface);
+  --active: var(--md-active-bg);
+  --text: var(--md-text-primary);
+  --muted: var(--md-text-secondary);
+  --control-text: var(--md-icon-inactive);
+  --secondary-text: var(--md-text-primary);
+  --media-title: var(--md-text-primary);
+  --media-detail-divider: var(--md-divider);
+  --media-chip-bg: color-mix(in srgb, var(--md-surface) 90%, transparent);
+  --media-chip-text: var(--md-text-primary);
+  --video-preview-overlay: rgba(0,0,0,.34);
+  --video-player-stage: var(--md-bg);
+  --video-controls-color: var(--md-on-accent);
+  --video-controls-progress: var(--md-accent);
+  --line: var(--md-divider);
+  --line-strong: var(--md-dock-border);
+  --soft-hover: color-mix(in srgb, var(--md-active-bg) 45%, transparent);
+  --scrollbar: color-mix(in srgb, var(--md-icon-inactive) 25%, transparent);
+  --loader-ring: var(--md-dock-border);
+  --menu-icon-bg: var(--md-active-bg);
+  --switch-bg: var(--md-active-bg);
+  --switch-thumb: var(--md-on-accent);
+  --secondary-button-bg: var(--md-surface-secondary);
+  --blue: var(--md-accent);
+  --green: var(--md-accent);
+  --red: var(--md-text-disabled);
+  --active-foreground: var(--md-icon-active);
+  --card-download-icon: var(--md-icon-inactive);
+
+  /* Sombras / highlights son efectos materiales, no colores de componente. */
+  --shadow-soft: rgba(0,0,0,.28);
+  --shadow-strong: rgba(0,0,0,.42);
+  --inset-highlight: color-mix(in srgb, var(--md-on-accent) 8%, transparent);
+}
+
+:root[data-theme="light"] {
+  /* =========================================================
+     PALETA UNIVERSAL · ONE UI 8.5 · LIGHT
+     Solo cambia esta tabla. El resto del UI hereda automaticamente.
+     ========================================================= */
+  --md-bg: #FAFAFA;
+  --md-surface: #FFFFFF;
+  --md-surface-secondary: #F1F1F3;
+  --md-dock-bg: var(--md-surface-secondary);
+  --md-dock-border: #E2E2E5;
+  --md-active-bg: #DEDFE2;
+  --md-text-primary: #111113;
+  --md-text-secondary: #707277;
+  --md-text-disabled: #96989D;
+  --md-icon-active: #161719;
+  --md-icon-inactive: #77797E;
+  --md-icon-disabled: #A5A6AA;
+  --md-divider: #E4E4E7;
+  --md-accent: #1A73E8;
+  --md-on-accent: #FFFFFF;
+
+  color-scheme: light;
+
+  /* Efectos materiales adaptados al tema, sin duplicar colores de componentes. */
+  --video-preview-overlay: rgba(0,0,0,.22);
+  --shadow-soft: rgba(0,0,0,.08);
+  --shadow-strong: rgba(0,0,0,.16);
+  --inset-highlight: color-mix(in srgb, var(--md-on-accent) 82%, transparent);
+  --media-card-shadow: 0 3.6px 10.8px rgba(0,0,0,.055);
+}
+
+* { box-sizing: border-box; }
+
+html,
+body {
+  width: var(--popup-width);
+  height: var(--popup-height);
+  min-width: var(--popup-width);
+  min-height: var(--popup-height);
+  max-width: var(--popup-width);
+  max-height: var(--popup-height);
+  margin: 0;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "One UI Sans APP VF", "One UI Sans", "SamsungOne", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+body.dialog-open { overflow: hidden; }
+
+button {
+  color: inherit;
+  font: inherit;
+}
+
+button:focus-visible {
+  outline: 1.8px solid var(--md-accent);
+  outline-offset: 1.8px;
+}
+
+svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+::-webkit-scrollbar { width: 6.3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar);
+  border-radius: 899.1px;
+}
+
+.app-shell {
+  width: var(--popup-width);
+  height: var(--popup-height);
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+}
+
+.theme-toggle {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* =========================================================
+   TRANSICION DE TEMA · REVELADO RADIAL DESDE EL ICONO
+   El tema nuevo nace dentro de un circulo en el toggle y crece
+   hasta cubrir todo el flyout. No altera layout ni tamaños.
+   ========================================================= */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 2;
+  clip-path: circle(0 at var(--theme-reveal-x, 0px) var(--theme-reveal-y, 100%));
+}
+
+.theme-toggle .theme-icon {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 19.8px;
+  height: 19.8px;
+  transform-origin: 50% 50%;
+  pointer-events: none;
+  transition:
+    opacity .42s cubic-bezier(.22, 1, .36, 1),
+    transform .46s cubic-bezier(.22, 1, .36, 1);
+}
+
+.theme-transition-running .theme-toggle .theme-icon {
+  will-change: transform, opacity;
+}
+
+.theme-toggle .theme-icon * {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition:
+    opacity .42s cubic-bezier(.22, 1, .36, 1),
+    transform .46s cubic-bezier(.22, 1, .36, 1),
+    fill-opacity .42s cubic-bezier(.22, 1, .36, 1),
+    stroke-opacity .42s cubic-bezier(.22, 1, .36, 1);
+}
+
+.theme-toggle .theme-icon-sun {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(.58) rotate(-60deg);
+}
+
+.theme-toggle .theme-icon-sun circle {
+  transform: scale(.76);
+}
+
+.theme-toggle .theme-icon-sun path {
+  opacity: 0;
+  transform: scale(.58);
+}
+
+.theme-toggle .theme-icon-moon {
+  fill: currentColor;
+  fill-opacity: .12;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(.58) rotate(52deg);
+}
+
+.theme-toggle .theme-icon-moon path {
+  transform: scale(.84);
+}
+
+/* El icono representa el modo al que cambiará el botón. */
+:root[data-theme="dark"] .theme-toggle .theme-icon-sun {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1) rotate(0deg);
+}
+
+:root[data-theme="dark"] .theme-toggle .theme-icon-sun circle {
+  transform: scale(1);
+}
+
+:root[data-theme="dark"] .theme-toggle .theme-icon-sun path {
+  opacity: 1;
+  transform: scale(1);
+}
+
+:root[data-theme="dark"] .theme-toggle .theme-icon-moon {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(.54) rotate(46deg);
+}
+
+:root[data-theme="dark"] .theme-toggle .theme-icon-moon path {
+  transform: scale(.76);
+}
+
+:root[data-theme="light"] .theme-toggle .theme-icon-moon {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1) rotate(0deg);
+}
+
+:root[data-theme="light"] .theme-toggle .theme-icon-moon path {
+  transform: scale(1);
+}
+
+:root[data-theme="light"] .theme-toggle .theme-icon-sun {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(.54) rotate(-46deg);
+}
+
+:root[data-theme="light"] .theme-toggle .theme-icon-sun circle {
+  transform: scale(.68);
+}
+
+:root[data-theme="light"] .theme-toggle .theme-icon-sun path {
+  opacity: 0;
+  transform: scale(.52);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .download-motion-arrow,
+  .download-motion.is-indeterminate .download-motion-ring,
+  .card-download.is-complete svg,
+  .player-download.is-complete svg {
+    animation: none !important;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
+    clip-path: none !important;
+  }
+
+  .theme-toggle .theme-icon,
+  .theme-toggle .theme-icon * {
+    transition: none;
+  }
+}
+
+.content-shell {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--edge-gap) var(--edge-gap) 90px;
+}
+
+.initial-loader {
+  min-height: 64.8px;
+  display: flex;
+  align-items: center;
+  gap: 11.7px;
+  margin-top: 3.6px;
+  padding: 10.8px 12.6px;
+  border-radius: 21.6px;
+  background: var(--surface-soft);
+  transition: opacity .18s ease, transform .18s ease, max-height .2s ease, padding .2s ease, margin .2s ease;
+  max-height: 81px;
+}
+
+.initial-loader.is-hidden {
+  opacity: 0;
+  transform: translateY(-5.4px);
+  min-height: 0;
+  max-height: 0;
+  margin: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.initial-loader strong,
+.initial-loader span {
+  display: block;
+}
+
+.initial-loader strong {
+  font-size: 12.6px;
+  font-weight: 600;
+}
+
+.initial-loader > div > span {
+  margin-top: 3.6px;
+  color: var(--muted);
+  font-size: 10.8px;
+}
+
+.loader-spinner {
+  width: 34.2px;
+  height: 34.2px;
+  flex: 0 0 34.2px;
+  border: 1.8px solid var(--loader-ring);
+  border-top-color: var(--control-text);
+  border-radius: 50%;
+  animation: spin .9s linear infinite;
+}
+
+.status-bar {
+  height: var(--dock-height);
+  min-height: var(--dock-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 9px;
+  margin: 0 0 12.6px;
+  padding: 6.3px 8.1px 6.3px 12.6px;
+  border: 0;
+  border-radius: var(--media-list-radius);
+  background: var(--md-surface);
+  box-shadow: none;
+  -webkit-backdrop-filter: var(--control-backdrop-filter);
+  backdrop-filter: var(--control-backdrop-filter);
+}
+
+.live-status {
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8.1px;
+  color: var(--secondary-text);
+  font-size: 11.25px;
+}
+
+.live-status.is-unavailable { color: var(--md-text-disabled); }
+
+.live-dot {
+  width: 7.2px;
+  height: 7.2px;
+  flex: 0 0 7.2px;
+  border-radius: 50%;
+  background: var(--green);
+}
+
+.live-status.is-unavailable .live-dot {
+  background: var(--red);
+}
+
+#status-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.all-pill {
+  min-width: 63px;
+  height: 39.6px;
+  padding: 0 16.2px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--md-accent);
+  color: var(--md-on-accent);
+  cursor: pointer;
+  font-size: 11.7px;
+  font-weight: 600;
+  transition: background .18s cubic-bezier(.2,.8,.2,1), color .18s cubic-bezier(.2,.8,.2,1), opacity .18s ease, transform .16s cubic-bezier(.2,.8,.2,1);
+}
+
+.all-pill:hover { background: color-mix(in srgb, var(--md-accent) 88%, var(--md-text-primary)); }
+.all-pill:active:not(:disabled) { transform: scale(.97); }
+.all-pill:disabled {
+  background: var(--md-active-bg);
+  color: var(--md-text-disabled);
+  opacity: 1;
+  cursor: default;
+}
+
+.empty-actions {
+  display: grid;
+  gap: 0;
+  margin-top: 12.6px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--media-list-radius);
+  background: var(--md-surface);
+  box-shadow: none;
+}
+
+body.has-items .empty-actions {
+  display: none;
+}
+
+.empty-action {
+  position: relative;
+  min-height: var(--media-list-row-height);
+  display: flex;
+  align-items: center;
+  gap: 12.6px;
+  padding: 9px 12.6px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--md-text-primary);
+  cursor: pointer;
+  text-align: left;
+  font-size: 13.5px;
+  font-weight: 600;
+  transition: background .18s cubic-bezier(.2,.8,.2,1), transform .16s cubic-bezier(.2,.8,.2,1);
+}
+
+.empty-action + .empty-action {
+  box-shadow: none;
+}
+
+.empty-action + .empty-action::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 36px;
+  right: 12.6px;
+  height: 1px;
+  background: var(--md-divider);
+  pointer-events: none;
+}
+
+.empty-action:hover {
+  background: color-mix(in srgb, var(--md-active-bg) 58%, transparent);
+}
+
+.empty-action:active {
+  transform: scale(.992);
+}
+
+.empty-action-icon {
+  width: 39.6px;
+  height: 39.6px;
+  flex: 0 0 39.6px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--md-active-bg);
+  color: var(--md-icon-active);
+}
+
+.empty-action-icon svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+  stroke: none;
+}
+
+.media-section-title {
+  min-height: 63px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  margin: 0 0 12.6px;
+  padding: 12.6px 0 0;
+  color: var(--md-text-primary);
+  font-size: 27px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -.01em;
+  text-align: center;
+}
+
+#media-content {
+  min-height: 0;
+}
+
+.photo-grid,
+.video-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--media-grid-gap);
+  align-items: start;
+}
+
+.media-card {
+  position: relative;
+  isolation: isolate;
+  display: block;
+  aspect-ratio: var(--media-card-aspect-ratio);
+  overflow: hidden;
+  border: 1px solid var(--media-card-border);
+  border-radius: var(--media-card-radius);
+  background: var(--md-surface);
+  box-shadow: var(--media-card-shadow);
+  transition: transform .16s cubic-bezier(.2,.8,.2,1), border-color .16s ease, box-shadow .16s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .media-card:hover {
+    border-color: color-mix(in srgb, var(--md-icon-inactive) 42%, var(--md-dock-border));
+  }
+}
+
+.media-card:active {
+  transform: scale(.992);
+}
+
+.media-card::after {
+  content: "";
+  position: absolute;
+  left: -24px;
+  right: -24px;
+  bottom: -24px;
+  height: 106px;
+  z-index: 2;
+  pointer-events: none;
+  border-radius: 0 0 calc(var(--media-card-radius) + 24px) calc(var(--media-card-radius) + 24px);
+  background: linear-gradient(180deg,
+    var(--media-info-blur-overlay-start) 0%,
+    var(--media-info-blur-overlay-mid) 42%,
+    var(--media-info-blur-overlay-end) 100%);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,.55) 26%, #000 58%, #000 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,.55) 26%, #000 58%, #000 100%);
+  clip-path: inset(0 0 0 0 round 0 0 var(--media-card-radius) var(--media-card-radius));
+}
+
+.media-frame {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  isolation: isolate;
+  overflow: hidden;
+  background: #0d0d0d;
+}
+
+.video-card {
+  display: block;
+  cursor: pointer;
+}
+
+.video-card .media-frame {
+  min-height: 0;
+}
+
+.media-preview,
+.preview-fallback {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.media-preview {
+  object-fit: cover;
+}
+
+.media-preview.is-broken {
+  display: none;
+}
+
+.hover-video-preview {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .14s ease;
+}
+
+.hover-video-preview.is-playing {
+  opacity: 1;
+}
+
+.video-preview-play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 2;
+  width: 34.2px;
+  height: 34.2px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255,255,255,.20);
+  border-radius: 50%;
+  background: var(--video-preview-overlay);
+  color: var(--md-on-accent);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  transition: opacity .14s ease, transform .14s ease;
+}
+
+.video-preview-play svg {
+  width: 15.3px;
+  height: 15.3px;
+  margin-left: 1.8px;
+  fill: currentColor;
+  stroke: none;
+}
+
+.video-card.is-hover-playing .video-preview-play {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(.86);
+}
+
+.preview-fallback {
+  display: grid;
+  place-items: center;
+  color: rgba(255,255,255,.3);
+}
+
+.preview-fallback svg {
+  width: 25.2px;
+  height: 25.2px;
+}
+
+.media-frame.has-preview .preview-fallback {
+  display: none;
+}
+
+.media-frame::after {
+  content: "";
+  position: absolute;
+  left: -1px;
+  right: -1px;
+  bottom: -1px;
+  height: 79px;
+  border-radius: 0 0 calc(var(--media-card-radius) + 1px) calc(var(--media-card-radius) + 1px);
+  background: linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,.10) 38%, rgba(0,0,0,.22) 100%);
+  pointer-events: none;
+}
+
+.format-chip,
+.unsupported-chip {
+  position: absolute;
+  top: 7.2px;
+  z-index: 2;
+  min-height: 21.6px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 7.2px;
+  border-radius: 899.1px;
+  background: color-mix(in srgb, var(--md-surface-secondary) 88%, transparent);
+  color: var(--md-icon-active);
+  font-size: 9.45px;
+  font-weight: 700;
+  letter-spacing: .02em;
+}
+
+.format-chip { right: 7.2px; }
+.unsupported-chip { left: 7.2px; color: var(--md-text-secondary); }
+
+/* ===== MEDIA DOWNLOAD ICON ===== */
+.card-download {
+  position: relative;
+  right: auto;
+  bottom: auto;
+  top: auto;
+  z-index: 2;
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  justify-self: end;
+  align-self: center;
+  width: 30.6px;
+  height: 30.6px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: var(--shared-control-border);
+  border-radius: 50%;
+  background: var(--shared-control-bg);
+  color: var(--card-download-icon);
+  cursor: pointer;
+  box-shadow: var(--shared-control-shadow);
+}
+
+.card-download:hover,
+.card-download:focus-visible {
+  background: var(--shared-control-bg);
+  color: var(--card-download-icon);
+}
+.card-download:disabled { cursor: default; }
+.card-download.is-complete { color: var(--md-accent); }
+.card-download.is-error { color: var(--md-text-disabled); }
+.card-download.is-unsupported { opacity: .55; }
+
+.card-download svg {
+  width: 16.2px;
+  height: 16.2px;
+}
+
+.video-card .card-download {
+  transform: none;
+}
+
+.video-card .card-download:active,
+.card-download:active {
+  transform: scale(.96);
+}
+
+
+/* ===== DESCARGA EN PROGRESO · ONE UI INSPIRED =====
+   Geometría estable: el aro se dibuja con CSS alrededor del centro real
+   del botón y la flecha queda fija en el centro. */
+.card-download.is-downloading,
+.player-download.is-downloading {
+  position: relative;
+  color: var(--md-icon-inactive);
+  opacity: 1;
+}
+
+.card-download.is-downloading:disabled,
+.player-download.is-downloading:disabled {
+  color: var(--md-icon-inactive);
+  opacity: 1;
+}
+
+.download-motion {
+  --download-progress-angle: 0deg;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  transform: translateX(0.5px);
+}
+
+/* Track: círculo completo, grande y perfectamente concéntrico. */
+.download-motion::after {
+  content: "";
+  position: absolute;
+  inset: 2.4px;
+  z-index: 0;
+  border: 1.35px solid color-mix(in srgb, currentColor 22%, transparent);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* Progress: aro independiente del SVG para evitar desplazamientos de transform. */
+.download-motion::before {
+  content: "";
+  position: absolute;
+  inset: 2.4px;
+  z-index: 1;
+  border-radius: 50%;
+  pointer-events: none;
+  background: conic-gradient(
+    from -90deg,
+    var(--md-accent) 0 var(--download-progress-angle),
+    transparent var(--download-progress-angle) 360deg
+  );
+  -webkit-mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - 2px),
+    #000 calc(100% - 1.75px)
+  );
+  mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - 2px),
+    #000 calc(100% - 1.75px)
+  );
+}
+
+.download-motion.is-indeterminate::before {
+  background: conic-gradient(
+    from -90deg,
+    var(--md-accent) 0 112deg,
+    transparent 112deg 360deg
+  );
+  animation: md-download-ring-spin 1s linear infinite;
+}
+
+.download-motion-arrow {
+  position: relative;
+  z-index: 2;
+  display: block;
+  margin: 0;
+  fill: currentColor !important;
+  stroke: none !important;
+  transform: none !important;
+  transform-origin: center;
+  animation: md-download-arrow-pulse 1.05s cubic-bezier(.4, 0, .2, 1) infinite;
+}
+
+.card-download .download-motion-arrow {
+  width: 16.2px !important;
+  height: 16.2px !important;
+}
+
+.player-download .download-motion-arrow {
+  width: 18px !important;
+  height: 18px !important;
+}
+
+@keyframes md-download-ring-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes md-download-arrow-pulse {
+  0%, 100% { opacity: .72; }
+  50% { opacity: 1; }
+}
+
+.card-download.is-complete svg,
+.player-download.is-complete svg {
+  animation: md-download-complete .28s cubic-bezier(.22, 1, .36, 1) both;
+}
+
+@keyframes md-download-complete {
+  0% { opacity: 0; transform: scale(.72); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* ===== MEDIA DESCRIPTION ===== */
+.card-meta {
+  position: absolute;
+  left: var(--media-info-dock-left);
+  right: var(--media-info-dock-right);
+  bottom: var(--media-info-dock-bottom);
+  z-index: 3;
+  width: auto;
+  min-width: 0;
+  min-height: var(--media-info-dock-min-height);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: auto auto;
+  align-items: center;
+  column-gap: 10.8px;
+  row-gap: 4.5px;
+  padding: var(--media-info-dock-padding-y) var(--media-info-dock-padding-x);
+  border: 0;
+  border-radius: var(--media-info-dock-radius);
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+}
+
+.video-card .card-meta {
+  padding-right: var(--media-info-dock-padding-x);
+}
+
+.media-title {
+  grid-column: 1;
+  grid-row: 1;
+  min-width: 0;
+  margin: 0;
+  color: var(--md-on-accent);
+  font-size: 11.25px;
+  font-weight: 600;
+  line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
+  -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 calc(100% - 18px), transparent 100%);
+  mask-image: linear-gradient(90deg, #000 0%, #000 calc(100% - 18px), transparent 100%);
+}
+
+.media-details {
+  grid-column: 1;
+  grid-row: 2;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4.5px;
+  color: var(--media-info-dock-muted);
+  font-size: 9.45px;
+}
+
+.detail-divider {
+  width: 2.7px;
+  height: 2.7px;
+  border-radius: 50%;
+  background: var(--media-detail-divider);
+}
+
+
+
+.empty-state {
+  min-height: 225px;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 27px 21.6px;
+  text-align: center;
+}
+
+.empty-icon {
+  width: 48.6px;
+  height: 48.6px;
+  display: grid;
+  place-items: center;
+  border-radius: 16.2px;
+  background: var(--surface-soft);
+  color: var(--control-text);
+}
+
+.empty-icon svg {
+  width: 22.5px;
+  height: 22.5px;
+}
+
+.empty-state h2 {
+  margin: 0;
+  font-size: 15.3px;
+  font-weight: 600;
+}
+
+.empty-state p {
+  max-width: 229.5px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 11.25px;
+  line-height: 1.48;
+}
+
+/* ===== DOCK DERECHO · BASE COMPARTIDA CON DOCK IZQUIERDO ===== */
+.composer-bar {
+  position: absolute;
+  left: auto;
+  right: var(--edge-gap);
+  bottom: var(--edge-gap);
+  z-index: 35;
+  width: var(--dock-right-width);
+  height: var(--dock-height);
+  display: grid;
+  grid-template-columns: repeat(3, 43.2px);
+  align-items: center;
+  justify-content: center;
+  padding: 4.5px;
+  border: var(--shared-control-border);
+  border-radius: var(--radius-pill);
+  background: var(--shared-control-bg);
+  box-shadow: var(--shared-control-shadow);
+}
+
+.media-dock {
+  overflow: hidden;
+  transition: opacity .28s cubic-bezier(.22, 1, .36, 1), transform .28s cubic-bezier(.22, 1, .36, 1);
+}
+
+/* ===== DOCK IZQUIERDO ===== */
+.utility-dock {
+  left: var(--edge-gap);
+  right: auto;
+  width: var(--dock-left-width);
+  grid-template-columns: repeat(2, 43.2px);
+  overflow: hidden;
+  transition: opacity .24s cubic-bezier(.22, 1, .36, 1), transform .24s cubic-bezier(.22, 1, .36, 1);
+}
+
+.utility-dock .theme-icon,
+.utility-dock .utility-icon {
+  width: var(--icon-size);
+  height: var(--icon-size);
+}
+
+.utility-dock .utility-icon {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+.utility-dock .theme-toggle .theme-icon {
+  width: var(--icon-size);
+  height: var(--icon-size);
+}
+
+.dock-button {
+  width: 43.2px;
+  height: 43.2px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--control-text);
+  cursor: pointer;
+  transition: background .14s ease, opacity .14s ease, transform .12s ease;
+}
+
+.dock-button:hover,
+.dock-button:focus-visible {
+  background: var(--soft-hover);
+}
+
+.dock-button:active {
+  transform: scale(.95);
+}
+
+.dock-button.is-active,
+.dock-button[aria-expanded="true"] {
+  background: var(--active);
+  color: var(--active-foreground);
+}
+
+/* ===== ICONOS ===== */
+.dock-icon {
+  width: var(--icon-size);
+  height: var(--icon-size);
+  display: block;
+  background: currentColor;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  pointer-events: none;
+}
+
+.dock-icon-video {
+  -webkit-mask-image: url("../../assets/Video.svg");
+  mask-image: url("../../assets/Video.svg");
+}
+
+.dock-icon-photos {
+  -webkit-mask-image: url("../../assets/Photos.svg");
+  mask-image: url("../../assets/Photos.svg");
+}
+
+.dock-icon-settings {
+  -webkit-mask-image: url("../../assets/Settings.svg");
+  mask-image: url("../../assets/Settings.svg");
+}
+
+/* =========================================================
+   BACKGROUND · BLUR UNIVERSAL FULL-BLEED
+   Un solo backdrop para todos los fondos de menu/popup.
+   ========================================================= */
+.menu-popover::before,
+.video-player-backdrop::before,
+.image-player-backdrop::before,
+.dialog-backdrop::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: var(--menu-backdrop-tint);
+  -webkit-backdrop-filter: var(--menu-backdrop-filter);
+  backdrop-filter: var(--menu-backdrop-filter);
+  -webkit-mask-image: var(--menu-backdrop-mask);
+  mask-image: var(--menu-backdrop-mask);
+  opacity: 0;
+  animation: menu-backdrop-in .26s cubic-bezier(.22, 1, .36, 1) forwards;
+}
+
+.video-preview-play,
+.card-download,
+.dock-button.is-active,
+.dock-button[aria-expanded="true"],
+.video-player-center-toggle,
+.video-player-close,
+.image-player-close,
+.player-download,
+.video-control-button {
+  -webkit-backdrop-filter: var(--control-backdrop-filter);
+  backdrop-filter: var(--control-backdrop-filter);
+}
+
+.media-card::after,
+.composer-bar,
+.menu-sheet,
+.video-player-controls,
+.video-player-more-menu,
+.video-player-fallback-icon,
+.video-player-info,
+.image-player-info {
+  -webkit-backdrop-filter: var(--control-backdrop-filter);
+  backdrop-filter: var(--control-backdrop-filter);
+}
+
+/* ===== POPUP · MATERIAL COMPARTIDO CON DOCK (solo apariencia, no layout) ===== */
+.image-player-close,
+.video-player-close,
+.player-download {
+  background: var(--shared-control-bg);
+  border: var(--shared-control-border);
+  box-shadow: var(--shared-control-shadow);
+  -webkit-backdrop-filter: var(--control-backdrop-filter);
+  backdrop-filter: var(--control-backdrop-filter);
+}
+
+.image-player-info,
+.video-player-info {
+  background: var(--shared-control-bg);
+  box-shadow: var(--shared-control-shadow);
+  -webkit-backdrop-filter: var(--control-backdrop-filter);
+  backdrop-filter: var(--control-backdrop-filter);
+}
+
+/* ===== MENU DE SETTINGS ===== */
+.menu-popover {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  overflow: hidden;
+  padding: 0 var(--edge-gap) calc(var(--dock-height) + var(--edge-gap) + var(--menu-dock-gap));
+  background: transparent;
+}
+
+.menu-popover[hidden] {
+  display: none;
+}
+
+body.menu-open .utility-dock {
+  opacity: 1;
+  transform: none;
+  pointer-events: none;
+}
+
+body.menu-open .media-dock {
+  z-index: 56;
+  opacity: 1;
+  transform: none;
+}
+
+@keyframes menu-backdrop-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Material motion: el fondo aparece junto con la superficie del menu. */
+.menu-popover::before {
+  animation: menu-backdrop-in 180ms cubic-bezier(0, 0, .2, 1) forwards;
+}
+
+@keyframes settings-menu-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(8px, 8px, 0) scale(.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+.menu-sheet {
+  position: relative;
+  z-index: 1;
+  width: 90%;
+  margin-left: auto;
+  scale: var(--action-menu-scale);
+  transform-origin: right bottom;
+  padding: 9px;
+  border: 1px solid var(--line-strong);
+  border-radius: 27px;
+  background: var(--shared-control-bg);
+  box-shadow:
+    0 16.2px 43.2px var(--shadow-soft),
+    inset 0 1px 0 var(--inset-highlight);
+  animation: settings-menu-enter 180ms cubic-bezier(0, 0, .2, 1) both;
+  will-change: transform, opacity;
+}
+
+.menu-item {
+  width: 100%;
+  min-height: 55.8px;
+  display: flex;
+  align-items: center;
+  gap: 12.6px;
+  padding: 6.3px 8.1px;
+  border: 0;
+  border-radius: 18px;
+  background: transparent;
+  color: var(--control-text);
+  cursor: pointer;
+  text-align: left;
+  font-size: 12.6px;
+  font-weight: 600;
+}
+
+.menu-item:hover {
+  background: var(--surface-hover);
+}
+
+.menu-item:disabled {
+  opacity: .4;
+  cursor: default;
+}
+
+.menu-item-icon {
+  width: 39.6px;
+  height: 39.6px;
+  flex: 0 0 39.6px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--menu-icon-bg);
+  color: var(--control-text);
+}
+
+.menu-item-icon svg,
+.menu-item-icon img {
+  width: 19.8px;
+  height: 19.8px;
+  display: block;
+}
+
+.menu-toggle {
+  position: relative;
+  padding-right: 10.8px;
+}
+
+.menu-toggle-copy {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2.7px;
+}
+
+.menu-toggle-copy > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.menu-toggle-copy small {
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 9.9px;
+  font-weight: 400;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.switch-control {
+  position: relative;
+  width: 39.6px;
+  height: 23.4px;
+  flex: 0 0 39.6px;
+  display: block;
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 999px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,0)),
+    var(--switch-bg);
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,.12),
+    inset 0 -1px 1px rgba(0,0,0,.12),
+    0 1px 3px rgba(0,0,0,.12);
+  transition:
+    background .32s cubic-bezier(.22,1,.36,1),
+    border-color .32s ease,
+    box-shadow .32s ease;
+  isolation: isolate;
+}
+
+.switch-control::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: inherit;
+  background: rgba(255,255,255,.08);
+  opacity: .45;
+  pointer-events: none;
+}
+
+.switch-thumb {
+  position: absolute;
+  top: 2.2px;
+  left: 2.2px;
+  z-index: 2;
+  width: 17px;
+  height: 17px;
+  border: 1px solid rgba(255,255,255,.7);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 28%, rgba(255,255,255,.98) 0 22%, rgba(255,255,255,.72) 42%, rgba(255,255,255,.28) 100%),
+    var(--switch-thumb);
+  box-shadow:
+    0 2px 5px rgba(0,0,0,.28),
+    inset 0 1px 1px rgba(255,255,255,.9);
+  transform: translateX(0) scale(1);
+  transform-origin: right center;
+  transition:
+    transform .46s cubic-bezier(.34,1.56,.64,1),
+    box-shadow .28s ease;
+  will-change: transform;
+}
+
+.switch-thumb::after {
+  content: "";
+  position: absolute;
+  top: 3.5px;
+  right: 8px;
+  width: 11px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.66);
+  filter: blur(2.2px);
+  opacity: 0;
+  transform: scaleX(.2);
+  transform-origin: right center;
+  transition:
+    opacity .16s ease,
+    transform .22s cubic-bezier(.22,1,.36,1);
+  pointer-events: none;
+}
+
+.menu-toggle:hover .switch-thumb {
+  box-shadow:
+    0 2px 7px rgba(0,0,0,.3),
+    0 0 0 3px rgba(255,255,255,.06),
+    inset 0 1px 1px rgba(255,255,255,.92);
+}
+
+.menu-toggle:active .switch-thumb {
+  transform: translateX(0) scaleX(1.24) scaleY(.88);
+}
+
+.menu-toggle:active .switch-thumb::after {
+  opacity: .72;
+  transform: scaleX(1);
+}
+
+.menu-toggle[aria-checked="true"] .switch-control {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.02)),
+    var(--blue);
+  border-color: rgba(255,255,255,.22);
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,.2),
+    inset 0 -1px 1px rgba(0,0,0,.08),
+    0 2px 7px color-mix(in srgb, var(--blue) 35%, transparent);
+}
+
+.menu-toggle[aria-checked="true"] .switch-thumb {
+  transform: translateX(17.8px) scale(1);
+  transform-origin: left center;
+}
+
+.menu-toggle[aria-checked="true"]:active .switch-thumb {
+  transform: translateX(17.8px) scaleX(1.24) scaleY(.88);
+}
+
+.menu-toggle[aria-checked="true"] .switch-thumb::after {
+  right: auto;
+  left: 8px;
+  transform-origin: left center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .switch-control,
+  .switch-thumb,
+  .switch-thumb::after {
+    transition-duration: .01ms !important;
+  }
+}
+
+/* =========================================================
+   POPUP · VIDEO
+   ========================================================= */
+
+.video-player-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 12.6px;
+  background: transparent;
+}
+
+.video-player-backdrop[hidden] {
+  display: none;
+}
+
+
+.video-player-dialog {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-popup);
+  background: transparent;
+  box-shadow: 0 24px 64px rgba(0,0,0,.46);
+  animation: sheet-in .18s cubic-bezier(.2,.8,.2,1);
+}
+
+.video-player-stage {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  margin: 7.2px 7.2px 0;
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 19.8px;
+  background: var(--video-player-stage);
+  box-shadow: inset 0 1px rgba(255,255,255,.04);
+  isolation: isolate;
+}
+
+.video-player-element {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  background: #000;
+}
+
+.video-player-element[hidden] {
+  display: none;
+}
+
+/* Botón central: conserva el control de reproducción y replica el gesto
+   visual de los reproductores modernos de Framer sin depender de librerías. */
+.video-player-center-toggle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 4;
+  width: 49.5px;
+  height: 49.5px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(255,255,255,.19);
+  border-radius: 50%;
+  background: rgba(18,18,18,.44);
+  color: var(--md-on-accent);
+  box-shadow: 0 10px 30px rgba(0,0,0,.28), inset 0 1px rgba(255,255,255,.08);
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  transition: transform .18s cubic-bezier(.2,.8,.2,1), background .18s ease, border-color .18s ease, opacity .18s ease;
+}
+
+.video-player-center-toggle:hover,
+.video-player-center-toggle:focus-visible {
+  background: rgba(28,28,28,.58);
+  border-color: rgba(255,255,255,.28);
+  transform: translate(-50%, -50%) scale(1.06);
+}
+
+.video-player-center-toggle:active {
+  transform: translate(-50%, -50%) scale(.96);
+}
+
+.video-player-center-toggle[hidden] {
+  display: none;
+}
+
+.video-center-icon {
+  position: absolute;
+  width: 21.6px;
+  height: 21.6px;
+  display: block;
+  fill: currentColor;
+  stroke: none;
+  transition: opacity .14s ease, transform .18s cubic-bezier(.2,.8,.2,1);
+}
+
+.video-center-icon-play {
+  margin-left: 2px;
+  opacity: 1;
+  transform: scale(1);
+}
+
+.video-center-icon-pause {
+  opacity: 0;
+  transform: scale(.72);
+}
+
+.video-player-stage.is-playing .video-center-icon-play {
+  opacity: 0;
+  transform: scale(.72);
+}
+
+.video-player-stage.is-playing .video-center-icon-pause {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* =========================================================
+   CONTROLES FLOTANTES TIPO GLASS
+   ========================================================= */
+
+.video-player-controls {
+  position: absolute;
+  left: 7.2px;
+  right: 7.2px;
+  bottom: 7.2px;
+  z-index: 5;
+  padding: 7.2px 8.1px 6.3px;
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 14.4px;
+  color: var(--video-controls-color);
+  background: rgba(12,12,12,.43);
+  box-shadow: 0 10px 28px rgba(0,0,0,.24), inset 0 1px rgba(255,255,255,.055);
+}
+
+.video-player-controls[hidden] {
+  display: none;
+}
+
+.video-player-progress-row {
+  display: flex;
+  align-items: center;
+  height: 8.1px;
+  padding: 0 1.8px;
+  margin-bottom: 3.6px;
+}
+
+.video-player-progress,
+.video-player-volume-slider {
+  margin: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  height: 2.7px;
+  border: 0;
+  border-radius: 999px;
+  outline: none;
+  background: linear-gradient(
+    to right,
+    var(--video-controls-progress) 0%,
+    var(--video-controls-progress) var(--range-progress, 0%),
+    rgba(255,255,255,.26) var(--range-progress, 0%),
+    rgba(255,255,255,.26) 100%
+  );
+  cursor: pointer;
+  transition: height .12s ease;
+}
+
+.video-player-progress {
+  width: 100%;
+}
+
+.video-player-progress:hover,
+.video-player-progress:focus-visible {
+  height: 3.6px;
+}
+
+.video-player-volume-slider {
+  width: 48.6px;
+  --range-progress: 100%;
+}
+
+.video-player-progress::-webkit-slider-thumb,
+.video-player-volume-slider::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 8.1px;
+  height: 8.1px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--md-on-accent);
+  box-shadow: 0 1px 5px rgba(0,0,0,.35);
+  transition: transform .12s ease;
+}
+
+.video-player-progress:hover::-webkit-slider-thumb,
+.video-player-volume-slider:hover::-webkit-slider-thumb {
+  transform: scale(1.16);
+}
+
+.video-player-progress::-moz-range-thumb,
+.video-player-volume-slider::-moz-range-thumb {
+  width: 8.1px;
+  height: 8.1px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--md-on-accent);
+  box-shadow: 0 1px 5px rgba(0,0,0,.35);
+}
+
+.video-player-control-row {
+  min-width: 0;
+  height: 27px;
+  display: flex;
+  align-items: center;
+  gap: 2.7px;
+}
+
+.video-control-button {
+  flex: 0 0 auto;
+  width: 27px;
+  height: 27px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--md-on-accent);
+  cursor: pointer;
+  transition: background .14s ease, transform .14s cubic-bezier(.2,.8,.2,1), opacity .14s ease;
+}
+
+.video-control-button:hover,
+.video-control-button:focus-visible {
+  background: rgba(255,255,255,.12);
+  transform: scale(1.04);
+}
+
+.video-control-button:active {
+  transform: scale(.94);
+}
+
+.video-control-button:disabled {
+  opacity: .38;
+  cursor: default;
+  transform: none;
+}
+
+.video-icon {
+  width: 16.2px;
+  height: 16.2px;
+  display: block;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.video-icon-play,
+.video-icon-pause,
+.video-icon-pause,
+.video-icon-muted {
+  display: none;
+}
+
+.video-player-stage.is-playing .video-icon-play {
+  display: none;
+}
+
+.video-player-stage.is-playing .video-icon-pause {
+  display: block;
+}
+
+.video-player-stage.is-muted .video-icon-volume {
+  display: none;
+}
+
+.video-player-stage.is-muted .video-icon-muted {
+  display: block;
+}
+
+.video-player-time {
+  flex: 0 0 auto;
+  margin-left: 2.7px;
+  color: rgba(255,255,255,.78);
+  font-size: 8.55px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.01em;
+  white-space: nowrap;
+}
+
+.video-player-control-spacer {
+  flex: 1 1 auto;
+  min-width: 1.8px;
+}
+
+.video-player-more-wrap {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.video-player-more-menu {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 8.1px);
+  z-index: 8;
+  width: 136.8px;
+  overflow: hidden;
+  padding: 4.5px;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 12.6px;
+  background: rgba(18,18,18,.72);
+  box-shadow: 0 14px 34px rgba(0,0,0,.36), inset 0 1px rgba(255,255,255,.05);
+}
+
+.video-player-more-menu[hidden] {
+  display: none;
+}
+
+.video-player-more-menu button {
+  width: 100%;
+  min-height: 28.8px;
+  padding: 6.3px 8.1px;
+  border: 0;
+  border-radius: 8.1px;
+  background: transparent;
+  color: var(--md-on-accent);
+  font: inherit;
+  font-size: 9.45px;
+  text-align: left;
+  cursor: pointer;
+  transition: background .12s ease;
+}
+
+.video-player-more-menu button:hover,
+.video-player-more-menu button.is-active {
+  background: rgba(255,255,255,.11);
+}
+
+.video-player-more-divider {
+  height: 1px;
+  margin: 3.6px 4.5px;
+  background: rgba(255,255,255,.12);
+}
+
+.video-player-fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7.2px;
+  padding: 25.2px;
+  color: var(--md-on-accent);
+  text-align: center;
+}
+
+.video-player-fallback[hidden] {
+  display: none;
+}
+
+.video-player-fallback strong {
+  font-size: 12.6px;
+  font-weight: 600;
+}
+
+.video-player-fallback > span:last-child {
+  max-width: 247.5px;
+  color: rgba(255,255,255,.66);
+  font-size: 10.35px;
+  line-height: 1.4;
+}
+
+.video-player-fallback-icon {
+  width: 39.6px;
+  height: 39.6px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 50%;
+  background: rgba(255,255,255,.08);
+}
+
+.video-player-fallback-icon svg {
+  width: 19.8px;
+  height: 19.8px;
+}
+
+.video-player-close {
+  position: absolute;
+  top: 8.1px;
+  right: 8.1px;
+  z-index: 6;
+  width: 29.7px;
+  height: 29.7px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: var(--shared-control-border);
+  border-radius: 50%;
+  background: var(--shared-control-bg);
+  color: var(--card-download-icon);
+  box-shadow: var(--shared-control-shadow);
+  cursor: pointer;
+  transition: background .14s ease, transform .14s ease, border-color .14s ease, opacity .14s ease;
+}
+
+.video-player-close:hover,
+.video-player-close:focus-visible {
+  background: var(--shared-control-bg);
+  border-color: var(--line-strong);
+  transform: scale(1.04);
+}
+
+.video-player-close:active {
+  transform: scale(.94);
+}
+
+.video-player-close svg {
+  width: 15.3px;
+  height: 15.3px;
+}
+
+.video-player-info {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 39.6px;
+  align-items: center;
+  gap: 10.8px;
+  padding: 11.7px 12.6px 12.6px;
+  background: var(--shared-control-bg);
+  border-top: var(--shared-control-border);
+  box-shadow: var(--shared-control-shadow), inset 0 1px 0 var(--inset-highlight);
+  -webkit-backdrop-filter: var(--control-backdrop-filter);
+  backdrop-filter: var(--control-backdrop-filter);
+}
+
+.video-player-copy {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.video-player-title {
+  margin: 0;
+  overflow: hidden;
+  color: var(--media-title);
+  font-size: 12.15px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 78%, rgba(0,0,0,.55) 90%, transparent 100%);
+  mask-image: linear-gradient(90deg, #000 0%, #000 78%, rgba(0,0,0,.55) 90%, transparent 100%);
+}
+
+.video-player-details {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5.4px;
+  margin-top: 4.5px;
+  color: var(--muted);
+  font-size: 9.45px;
+  -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 82%, rgba(0,0,0,.55) 92%, transparent 100%);
+  mask-image: linear-gradient(90deg, #000 0%, #000 82%, rgba(0,0,0,.55) 92%, transparent 100%);
+}
+
+.player-download {
+  width: 39.6px;
+  min-width: 39.6px;
+  flex: 0 0 39.6px;
+  height: 39.6px;
+  display: grid;
+  place-items: center;
+  align-self: center;
+  padding: 0;
+  border: var(--shared-control-border);
+  border-radius: 50%;
+  background: var(--shared-control-bg);
+  color: var(--card-download-icon);
+  box-shadow: var(--shared-control-shadow);
+  -webkit-backdrop-filter: var(--control-backdrop-filter);
+  backdrop-filter: var(--control-backdrop-filter);
+  cursor: pointer;
+}
+
+.player-download:hover {
+  background: var(--shared-control-bg);
+}
+
+.player-download:disabled {
+  cursor: default;
+}
+
+.video-player-info .player-download {
+  border-radius: 50%;
+  transition: background .14s ease, transform .14s cubic-bezier(.2,.8,.2,1);
+}
+
+.video-player-info .player-download:hover {
+  transform: scale(1.03);
+}
+
+.video-player-info .player-download:active {
+  transform: scale(.95);
+}
+
+.video-player-info .player-download:disabled {
+  transform: none;
+}
+
+.player-download.is-complete { color: var(--md-accent); }
+.player-download.is-error { color: var(--md-text-disabled); }
+.player-download.is-unsupported { opacity: .55; }
+
+.player-download svg {
+  width: 18px;
+  height: 18px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .video-player-center-toggle,
+  .video-center-icon,
+  .video-control-button,
+  .video-player-close,
+  .video-player-info .player-download {
+    transition: none;
+  }
+}
+
+/* =========================================================
+   POPUP · FOTO
+   ========================================================= */
+
+.image-player-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 12.6px;
+  background: transparent;
+}
+
+.image-player-backdrop[hidden] {
+  display: none;
+}
+
+
+.image-player-dialog {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 324px;
+  max-height: calc(100vh - 32.4px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  border-radius: 25.2px;
+  background: transparent;
+  box-shadow: 0 19.8px 48.6px var(--shadow-strong);
+  animation: sheet-in .15s ease;
+}
+
+.image-player-stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 205.2px;
+  max-height: 306px;
+  padding: 12.6px;
+  overflow: hidden;
+  background: var(--video-player-stage);
+}
+
+.image-player-element {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  border-radius: 12.6px;
+  background: #000;
+}
+
+.image-player-element[hidden] {
+  display: none;
+}
+
+.image-player-fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7.2px;
+  padding: 25.2px;
+  color: var(--md-on-accent);
+  text-align: center;
+}
+
+.image-player-fallback[hidden] {
+  display: none;
+}
+
+.image-player-fallback strong {
+  font-size: 12.6px;
+  font-weight: 600;
+}
+
+.image-player-fallback > span:last-child {
+  max-width: 247.5px;
+  color: rgba(255,255,255,.66);
+  font-size: 10.35px;
+  line-height: 1.4;
+}
+
+.image-player-fallback-icon {
+  width: 37.8px;
+  height: 37.8px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(255,255,255,.10);
+}
+
+.image-player-fallback-icon svg {
+  width: 19.8px;
+  height: 19.8px;
+}
+
+.image-player-close {
+  position: absolute;
+  top: 9px;
+  right: 9px;
+  z-index: 4;
+  width: 30.6px;
+  height: 30.6px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: var(--shared-control-border);
+  border-radius: 50%;
+  background: var(--shared-control-bg);
+  color: var(--card-download-icon);
+  box-shadow: var(--shared-control-shadow);
+  cursor: pointer;
+}
+
+.image-player-close:hover {
+  background: var(--shared-control-bg);
+}
+
+.image-player-close svg {
+  width: 14.4px;
+  height: 14.4px;
+}
+
+/* Backdrop blur needs the dialog transform to return to none after opening. */
+.image-player-info {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 39.6px;
+  align-items: center;
+  gap: 10.8px;
+  padding: 11.7px 12.6px 12.6px;
+  background: var(--shared-control-bg);
+  border-top: var(--shared-control-border);
+  box-shadow: var(--shared-control-shadow), inset 0 1px 0 var(--inset-highlight);
+  -webkit-backdrop-filter: var(--control-backdrop-filter);
+  backdrop-filter: var(--control-backdrop-filter);
+}
+
+.image-player-copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5.4px;
+  overflow: hidden;
+}
+
+.image-player-title {
+  margin: 0;
+  overflow: hidden;
+  color: var(--media-title);
+  font-size: 12.6px;
+  font-weight: 600;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 78%, rgba(0,0,0,.55) 90%, transparent 100%);
+  mask-image: linear-gradient(90deg, #000 0%, #000 78%, rgba(0,0,0,.55) 90%, transparent 100%);
+}
+
+.image-player-details {
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4.5px;
+  color: var(--muted);
+  font-size: 9.9px;
+  -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 82%, rgba(0,0,0,.55) 92%, transparent 100%);
+  mask-image: linear-gradient(90deg, #000 0%, #000 82%, rgba(0,0,0,.55) 92%, transparent 100%);
+}
+
+/* ===== POPUP · CONFIRMACION ===== */
+.dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: hidden;
+  padding: 16.2px;
+  background: transparent;
+}
+
+.dialog-backdrop[hidden] {
+  display: none;
+}
+
+
+.confirm-dialog {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 297px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 11.7px;
+  padding: 18px 16.2px 16.2px;
+  border: 1px solid var(--line-strong);
+  border-radius: 27px;
+  background: var(--surface);
+  box-shadow: 0 16.2px 43.2px var(--shadow-strong);
+  text-align: center;
+  animation: sheet-in .15s ease;
+}
+
+.dialog-icon {
+  width: 48.6px;
+  height: 48.6px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--menu-icon-bg);
+  color: var(--control-text);
+}
+
+.dialog-icon svg {
+  width: 21.6px;
+  height: 21.6px;
+}
+
+.dialog-icon svg,
+.card-download svg,
+.player-download svg {
+  fill: currentColor;
+  stroke: none;
+}
+
+.confirm-dialog h2 {
+  margin: 0;
+  font-size: 19.8px;
+  font-weight: 600;
+  letter-spacing: -.02em;
+}
+
+.confirm-dialog p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 11.7px;
+  line-height: 1.48;
+}
+
+.dialog-actions {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 8.1px;
+}
+
+.dialog-button {
+  min-height: 41.4px;
+  border: 0;
+  border-radius: 899.1px;
+  cursor: pointer;
+  font-size: 11.7px;
+  font-weight: 600;
+}
+
+.dialog-button.secondary {
+  background: var(--secondary-button-bg);
+  border: 1px solid var(--line);
+  color: var(--control-text);
+}
+
+.dialog-button.primary {
+  background: var(--md-accent);
+  color: var(--md-on-accent);
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 75.6px;
+  z-index: 70;
+  min-width: 220.5px;
+  max-width: 297px;
+  padding: 12.6px 14.4px;
+  border: var(--shared-control-border);
+  border-radius: var(--radius-pill);
+  background: var(--shared-control-bg);
+  color: var(--control-text);
+  box-shadow: var(--shared-control-shadow);
+  -webkit-backdrop-filter: var(--control-backdrop-filter);
+  backdrop-filter: var(--control-backdrop-filter);
+  font-size: 11.7px;
+  transform: translate(-50%, 14.4px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .15s ease, transform .15s ease;
+}
+
+.toast::before {
+  content: "";
+  display: inline-block;
+  width: 8.1px;
+  height: 8.1px;
+  margin-right: 8.1px;
+  border-radius: 50%;
+  background: var(--green);
+}
+
+.toast.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes sheet-in {
+  from { opacity: 0; transform: translateY(12.6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    transition-duration: .001ms !important;
+  }
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .menu-sheet { background: var(--surface); }
+
+  :root[data-theme="light"] .composer-bar {
+    background: color-mix(in srgb, var(--md-dock-bg) 60%, transparent);
+  }
+}
+
+:root[data-theme="light"] .live-status.is-unavailable {
+  color: var(--md-text-disabled);
+}
+
+:root[data-theme="light"] .menu-sheet,
+:root[data-theme="light"] .composer-bar {
+  border-color: var(--md-dock-border);
+}
+
+:root[data-theme="light"] .toast {
+  color: var(--md-text-primary);
+}
+
+
+/* ===== ESTADOS UNIVERSALES DE COLOR ===== */
+.dock-button:disabled,
+.all-pill:disabled,
+.card-download:disabled,
+.player-download:disabled,
+.dialog-button:disabled {
+  color: var(--md-icon-disabled);
+}
+
+/* =========================================================
+   VIDEO PLAYER · FRAMER REFERENCE MATCH
+   Reproduces the supplied Framer visual structure:
+   full-bleed video, bottom gradient, full-width seek bar,
+   time at left and Volume / Speed / Fullscreen at right.
+   ========================================================= */
+.video-player-dialog {
+  width: 100%;
+  overflow: visible;
+  border: 0;
+  border-radius: 16px;
+  background: transparent;
+  box-shadow: none;
+}
+
+.video-player-stage {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 15px;
+  background: #000;
+  box-shadow: none;
+  isolation: isolate;
+}
+
+.video-player-element {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+  background: #000;
+  cursor: pointer;
+}
+
+/* The Framer reference has no floating center play orb. Playback remains
+   available by clicking/tapping the video itself. */
+.video-player-center-toggle {
+  display: none !important;
+}
+
+.video-player-stage::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  height: 38%;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(0,0,0,0) 0%,
+    rgba(0,0,0,.08) 20%,
+    rgba(0,0,0,.42) 62%,
+    rgba(0,0,0,.72) 100%
+  );
+}
+
+/* Controls are not a capsule. They sit directly over the lower video area. */
+.video-player-controls {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 7;
+  display: block;
+  padding: 0 18px 18px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--md-on-accent);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.video-player-controls[hidden] {
+  display: none;
+}
+
+.video-player-progress-row {
+  width: 100%;
+  height: 8px;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  margin: 0 0 14px;
+}
+
+.video-player-progress {
+  width: 100%;
+  height: 4px;
+  margin: 0;
+  border: 0;
+  border-radius: 999px;
+  outline: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  background: linear-gradient(
+    to right,
+    #ffffff 0%,
+    #ffffff var(--range-progress, 0%),
+    rgba(255,255,255,.25) var(--range-progress, 0%),
+    rgba(255,255,255,.25) 100%
+  );
+  transition: none;
+}
+
+.video-player-progress:hover,
+.video-player-progress:focus-visible {
+  height: 4px;
+}
+
+.video-player-progress::-webkit-slider-thumb {
+  width: 0;
+  height: 0;
+  border: 0;
+  border-radius: 50%;
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--md-on-accent);
+  box-shadow: none;
+  transition: width .12s ease, height .12s ease;
+}
+
+.video-player-progress:hover::-webkit-slider-thumb,
+.video-player-progress:focus-visible::-webkit-slider-thumb {
+  width: 8px;
+  height: 8px;
+}
+
+.video-player-progress::-moz-range-thumb {
+  width: 0;
+  height: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--md-on-accent);
+}
+
+.video-player-progress:hover::-moz-range-thumb,
+.video-player-progress:focus-visible::-moz-range-thumb {
+  width: 8px;
+  height: 8px;
+}
+
+.video-player-control-row {
+  width: 100%;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* The reference exposes only time + three actions. Keep the existing
+   functionality in the DOM while removing the extra visual controls. */
+#video-player-play,
+#video-player-volume-slider,
+#video-player-pip {
+  display: none !important;
+}
+
+.video-player-time {
+  order: 0;
+  flex: 0 0 auto;
+  margin: 0;
+  color: rgba(255,255,255,.88);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.01em;
+  white-space: nowrap;
+}
+
+.video-player-control-spacer {
+  order: 1;
+  flex: 1 1 auto;
+  min-width: 6px;
+}
+
+#video-player-volume {
+  order: 2;
+}
+
+.video-player-more-wrap {
+  order: 3;
+  position: relative;
+  flex: 0 0 auto;
+}
+
+#video-player-fullscreen {
+  order: 4;
+}
+
+.video-control-button {
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: var(--shared-control-border);
+  border-radius: 8px;
+  background: var(--shared-control-bg);
+  color: var(--md-on-accent);
+  box-shadow: inset 0 1px color-mix(in srgb, var(--md-on-accent) 5%, transparent);
+  cursor: pointer;
+  transition: background .12s ease, border-color .12s ease, transform .12s ease;
+}
+
+.video-control-button:hover,
+.video-control-button:focus-visible {
+  border-color: var(--md-dock-border);
+  background: var(--md-active-bg);
+  transform: none;
+}
+
+.video-control-button:active {
+  background: var(--md-active-bg);
+  transform: scale(.96);
+}
+
+.video-icon {
+  width: 16px;
+  height: 16px;
+  display: block;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.video-control-button .video-icon-volume,
+.video-control-button .video-icon-muted {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+}
+
+.video-control-button .video-icon-muted {
+  display: none;
+}
+
+.video-player-stage:not(.is-muted) .video-control-button .video-icon-volume {
+  display: block;
+}
+
+.video-player-stage:not(.is-muted) .video-control-button .video-icon-muted {
+  display: none;
+}
+
+.video-player-stage.is-muted .video-control-button .video-icon-volume {
+  display: none;
+}
+
+.video-player-stage.is-muted .video-control-button .video-icon-muted {
+  display: block;
+}
+
+.video-player-speed-button {
+  width: 44px;
+  padding: 0 8px;
+}
+
+.video-player-speed-label {
+  display: block;
+  color: color-mix(in srgb, var(--md-on-accent) 84%, transparent);
+  font-size: 11px;
+  font-weight: 650;
+  line-height: 1;
+  letter-spacing: -.02em;
+  white-space: nowrap;
+}
+
+.video-player-more-menu {
+  right: 0;
+  bottom: calc(100% + 8px);
+  width: 136px;
+  padding: 4px;
+  overflow: hidden;
+  border: var(--shared-control-border);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--md-dock-bg) 94%, transparent);
+  box-shadow: 0 12px 30px rgba(0,0,0,.34);
+}
+
+.video-player-more-menu button {
+  min-height: 29px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-size: 10px;
+}
+
+/* The supplied player has no modal close orb and no separate metadata card. */
+.video-player-close,
+.video-player-info {
+  display: none !important;
+}
+
+/* Fallback remains functional if a source cannot be played. */
+.video-player-fallback {
+  z-index: 8;
+}
+
+@media (max-width: 330px) {
+  .video-player-controls {
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-bottom: 12px;
+  }
+  .video-player-progress-row {
+    margin-bottom: 12px;
+  }
+  .video-player-control-row {
+    gap: 5px;
+  }
+  .video-control-button {
+    width: 31px;
+    height: 31px;
+  }
+  .video-player-speed-button {
+    width: 37px;
+  }
+  .video-player-time {
+    font-size: 10.5px;
+  }
+}
+
+/* =========================================================
+   VIDEO PLAYER · COMPACT FROST PASS
+   Neutral frost controls, tighter vertical rhythm, smaller icons.
+   ========================================================= */
+.video-player-controls {
+  padding: 0 16px 12px;
+}
+
+.video-player-progress-row {
+  height: 6px;
+  margin: 0 0 9px;
+}
+
+.video-player-progress {
+  height: 3px;
+}
+
+.video-player-progress:hover,
+.video-player-progress:focus-visible {
+  height: 3px;
+}
+
+.video-player-progress::-webkit-slider-thumb {
+  width: 0;
+  height: 0;
+}
+
+.video-player-progress:hover::-webkit-slider-thumb,
+.video-player-progress:focus-visible::-webkit-slider-thumb {
+  width: 6px;
+  height: 6px;
+}
+
+.video-player-progress::-moz-range-thumb {
+  width: 0;
+  height: 0;
+}
+
+.video-player-progress:hover::-moz-range-thumb,
+.video-player-progress:focus-visible::-moz-range-thumb {
+  width: 6px;
+  height: 6px;
+}
+
+.video-player-control-row {
+  height: 30px;
+  gap: 6px;
+}
+
+.video-player-time {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: rgba(255,255,255,.86);
+}
+
+.video-control-button {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  border: 1px solid rgba(255,255,255,.13);
+  border-radius: 7px;
+  background: rgba(255,255,255,.025);
+  color: rgba(255,255,255,.92);
+  box-shadow: inset 0 1px rgba(255,255,255,.045);
+}
+
+.video-control-button:hover,
+.video-control-button:focus-visible {
+  border-color: rgba(255,255,255,.20);
+  background: rgba(255,255,255,.045);
+}
+
+.video-control-button:active {
+  background: rgba(255,255,255,.055);
+  transform: scale(.96);
+}
+
+.video-icon {
+  width: 13px;
+  height: 13px;
+  stroke-width: 1.65;
+}
+
+/* Lock volume artwork to one centered glyph. */
+#video-player-volume .video-icon-volume,
+#video-player-volume .video-icon-muted {
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  inset: 50% auto auto 50%;
+  margin: 0;
+  transform: translate(-50%, -50%);
+}
+
+.video-player-stage:not(.is-muted) #video-player-volume .video-icon-volume { display: block !important; }
+.video-player-stage:not(.is-muted) #video-player-volume .video-icon-muted { display: none !important; }
+.video-player-stage.is-muted #video-player-volume .video-icon-volume { display: none !important; }
+.video-player-stage.is-muted #video-player-volume .video-icon-muted { display: block !important; }
+
+.video-player-speed-button {
+  width: 36px;
+  height: 30px;
+  padding: 0 6px;
+}
+
+.video-player-speed-label {
+  font-size: 10px;
+  color: rgba(255,255,255,.88);
+}
+
+.video-player-more-menu {
+  background: rgba(20,20,20,.18);
+  border-color: rgba(255,255,255,.13);
+}
+
+@media (max-width: 330px) {
+  .video-player-controls {
+    padding: 0 11px 10px;
+  }
+  .video-player-progress-row {
+    margin-bottom: 8px;
+  }
+  .video-player-control-row {
+    height: 28px;
+    gap: 5px;
+  }
+  .video-control-button {
+    width: 28px;
+    height: 28px;
+  }
+  .video-player-speed-button {
+    width: 34px;
+    height: 28px;
+  }
+  .video-icon,
+  #video-player-volume .video-icon-volume,
+  #video-player-volume .video-icon-muted {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+.utility-dock .utility-icon-refresh {
+  width: var(--icon-size);
+  height: var(--icon-size);
+  display: block;
+  pointer-events: none;
+  background-color: currentColor;
+  -webkit-mask: url("../../assets/Refresh.svg") center / contain no-repeat;
+  mask: url("../../assets/Refresh.svg") center / contain no-repeat;
+}
+
+/* =========================================================
+   ONE UI DESIGN KIT · OFFICIAL VISUAL PASS
+   Solo apariencia. No modifica medidas, posiciones ni blur.
+   Referencia: One UI Design Kit (Figma) · Button/Card/Switch/
+   In-App Navigation/Drop Down Menu.
+   ========================================================= */
+:root {
+  --md-bg: #010102;
+  --md-surface: #17171A;
+  --md-surface-secondary: #2E2E30;
+  --md-dock-bg: #2E2E30;
+  --md-dock-border: #353639;
+  --md-active-bg: rgba(61, 61, 61, .70);
+  --md-text-primary: #FFFFFF;
+  --md-text-secondary: #848487;
+  --md-text-disabled: #848487;
+  --md-icon-active: #FFFFFF;
+  --md-icon-inactive: rgba(255, 255, 255, .60);
+  --md-icon-disabled: rgba(255, 255, 255, .38);
+  --md-divider: #5F5F61;
+  --md-accent: #387AFF;
+  --md-on-accent: #FFFFFF;
+
+  --shared-control-bg: rgba(46, 46, 48, .60);
+  --shared-control-border: 1px solid var(--md-dock-border);
+  --shared-control-shadow: 0 6px 18.9px rgba(0, 0, 0, .10);
+
+  --media-card-border: var(--md-dock-border);
+  --media-card-radius: 28px;
+  --media-list-radius: 28px;
+  --menu-icon-bg: transparent;
+  --switch-bg: #5F5F61;
+  --switch-thumb: #FFFFFF;
+  --secondary-button-bg: #2E2E30;
+  --active-foreground: #FFFFFF;
+  --card-download-icon: rgba(255, 255, 255, .60);
+}
+
+:root[data-theme="light"] {
+  --md-bg: #FCFCFF;
+  --md-surface: #FCFCFF;
+  --md-surface-secondary: #EAEAEA;
+  --md-dock-bg: #FCFCFF;
+  --md-dock-border: #E2E2E5;
+  --md-active-bg: #EAEAEA;
+  --md-text-primary: #000000;
+  --md-text-secondary: #848487;
+  --md-text-disabled: #848487;
+  --md-icon-active: #000000;
+  --md-icon-inactive: #848487;
+  --md-icon-disabled: rgba(0, 0, 0, .32);
+  --md-divider: #EAEAEA;
+  --md-accent: #387AFF;
+  --md-on-accent: #FFFFFF;
+
+  --shared-control-bg: rgba(252, 252, 255, .72);
+  --shared-control-border: 1px solid var(--md-dock-border);
+  --shared-control-shadow: 0 6px 18.9px rgba(0, 0, 0, .08);
+
+  --media-card-border: var(--md-dock-border);
+  --menu-icon-bg: transparent;
+  --switch-bg: #EAEAEA;
+  --secondary-button-bg: #EAEAEA;
+  --active-foreground: #000000;
+  --card-download-icon: #848487;
+}
+
+html,
+body,
+button,
+input,
+select,
+textarea {
+  font-family: "One UI Sans APP VF", "One UI Sans", "SamsungOne", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-feature-settings: "dlig" 1, "lnum" 1, "pnum" 1;
+}
+
+.initial-loader,
+.status-bar,
+.empty-actions,
+.confirm-dialog {
+  border-radius: 28px;
+  background-color: var(--md-surface);
+}
+
+.media-card {
+  border-color: transparent;
+  border-radius: 28px;
+  background-color: var(--md-surface);
+}
+
+.all-pill,
+.dialog-button.primary {
+  background: #387AFF;
+  color: #FFFFFF;
+  font-weight: 700;
+}
+
+.all-pill:hover,
+.dialog-button.primary:hover {
+  background: #387AFF;
+}
+
+.empty-action,
+.menu-item {
+  font-weight: 400;
+}
+
+.empty-action-icon {
+  background: var(--md-surface-secondary);
+  color: var(--md-icon-active);
+}
+
+.composer-bar {
+  border-color: var(--md-dock-border);
+  background: var(--shared-control-bg);
+  box-shadow: var(--shared-control-shadow);
+}
+
+.dock-button {
+  color: var(--md-icon-inactive);
+}
+
+.dock-button:hover,
+.dock-button:focus-visible {
+  background: color-mix(in srgb, var(--md-active-bg) 55%, transparent);
+}
+
+.dock-button.is-active,
+.dock-button[aria-expanded="true"] {
+  background: var(--md-active-bg);
+  color: var(--md-icon-active);
+}
+
+.menu-sheet {
+  border-color: var(--line-strong);
+  border-radius: 28px;
+  background: rgba(23, 23, 26, .60);
+  box-shadow: 0 6px 18.9px rgba(0, 0, 0, .10);
+}
+
+:root[data-theme="light"] .menu-sheet {
+  background: rgba(252, 252, 255, .78);
+  box-shadow: 0 6px 18.9px rgba(0, 0, 0, .08);
+}
+
+.menu-item {
+  color: var(--md-text-primary);
+}
+
+.menu-item:hover {
+  background: color-mix(in srgb, var(--md-active-bg) 72%, transparent);
+}
+
+.menu-item-icon {
+  background: transparent;
+  color: var(--md-text-primary);
+}
+
+.menu-toggle-copy small {
+  color: #848487;
+}
+
+.switch-control {
+  border-color: color-mix(in srgb, var(--md-text-primary) 14%, transparent);
+  background: var(--switch-bg);
+  box-shadow: none;
+}
+
+.switch-control::before,
+.switch-thumb::after {
+  display: none;
+}
+
+.switch-thumb {
+  border-color: transparent;
+  background: #FFFFFF;
+  box-shadow: none;
+}
+
+.menu-toggle:hover .switch-thumb {
+  box-shadow: none;
+}
+
+.menu-toggle[aria-checked="true"] .switch-control {
+  border-color: transparent;
+  background: #387AFF;
+  box-shadow: none;
+}
+
+.dialog-button.secondary {
+  background: var(--secondary-button-bg);
+  border-color: var(--line);
+  color: var(--md-text-primary);
+  font-weight: 700;
+}
+
+.confirm-dialog {
+  border-color: var(--line-strong);
+}
+
+.dialog-icon {
+  background: var(--md-surface-secondary);
+  color: var(--md-text-primary);
+}
+
+.toast,
+.image-player-close,
+.video-player-close,
+.player-download,
+.card-download {
+  border-color: var(--md-dock-border);
+}
+
+/* =========================================================
+   DOCK DERECHO · MATERIAL MOTION SHARED INDICATOR
+   Un único indicador se desplaza entre Videos, Fotos y Ajustes.
+   Motion: 300ms por un paso, 400ms por dos; easing cubic-bezier(.2, 0, 0, 1).
+   ========================================================= */
+.media-dock {
+  --media-dock-indicator-index: 1;
+  --media-dock-indicator-duration: 300ms;
+  isolation: isolate;
+}
+
+.media-dock::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  left: 4.5px;
+  top: 4.5px;
+  width: 43.2px;
+  height: 43.2px;
+  border-radius: 50%;
+  pointer-events: none;
+  background: var(--md-active-bg);
+  -webkit-backdrop-filter: var(--control-backdrop-filter);
+  backdrop-filter: var(--control-backdrop-filter);
+  transform: translate3d(calc(var(--media-dock-indicator-index) * 43.2px), 0, 0);
+  transition: transform var(--media-dock-indicator-duration) cubic-bezier(.2, 0, 0, 1);
+  will-change: transform;
+}
+
+.media-dock .dock-button {
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  transition:
+    color 200ms cubic-bezier(.2, 0, 0, 1),
+    opacity 140ms ease,
+    transform 120ms ease,
+    background 140ms ease;
+}
+
+.media-dock .dock-button:hover {
+  background: transparent;
+}
+
+.media-dock .dock-button:focus-visible {
+  background: color-mix(in srgb, var(--md-active-bg) 55%, transparent);
+}
+
+.media-dock .dock-button.is-active,
+.media-dock .dock-button[aria-expanded="true"] {
+  background: transparent;
+  color: var(--md-icon-active);
+}
+
+.media-dock.is-settings-active .media-tab.is-active {
+  color: var(--md-icon-inactive);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .media-dock::before {
+    transition: none;
+  }
+}
+
+
+/* =========================================================
+   ONE UI · MATERIAL EDGE v1
+   Ribete óptico para las superficies ya existentes.
+   No modifica radios, medidas, blur, ni la lógica de la extensión.
+   El borde captura un destello superior, laterales muy suaves y
+   un oscurecimiento inferior para sugerir espesor de material.
+   ========================================================= */
+:root {
+  --material-rim-top: rgba(255,255,255,.31);
+  --material-rim-side: rgba(255,255,255,.13);
+  --material-rim-bottom: rgba(255,255,255,.055);
+  --material-inner-glow: rgba(255,255,255,.095);
+  --material-inner-depth: rgba(0,0,0,.16);
+  --material-edge-gradient: linear-gradient(155deg,
+    var(--material-rim-top) 0%,
+    var(--material-rim-side) 24%,
+    rgba(255,255,255,.075) 49%,
+    var(--material-rim-bottom) 76%,
+    var(--material-rim-side) 100%);
+  --material-edge-shadow:
+    0 6px 18.9px var(--shadow-soft),
+    0 1px 2px rgba(0,0,0,.08),
+    inset 0 1px 0 var(--material-inner-glow),
+    inset 0 -1px 0 var(--material-inner-depth);
+  --material-edge-inset:
+    inset 0 1px 0 var(--material-inner-glow),
+    inset 0 -1px 0 var(--material-inner-depth);
+}
+:root[data-theme="light"] {
+  --material-rim-top: rgba(255,255,255,.98);
+  --material-rim-side: rgba(255,255,255,.60);
+  --material-rim-bottom: rgba(83,84,100,.14);
+  --material-inner-glow: rgba(255,255,255,.88);
+  --material-inner-depth: rgba(66,67,82,.065);
+  --material-edge-gradient: linear-gradient(155deg,
+    var(--material-rim-top) 0%,
+    var(--material-rim-side) 24%,
+    rgba(89,92,109,.15) 52%,
+    var(--material-rim-bottom) 78%,
+    rgba(255,255,255,.74) 100%);
+  --material-edge-shadow:
+    0 6px 18.9px var(--shadow-soft),
+    0 1px 2px rgba(0,0,0,.035),
+    inset 0 1px 0 var(--material-inner-glow),
+    inset 0 -1px 0 var(--material-inner-depth);
+}
+
+/* Superficies flotantes de cristal: mismo acabado de borde,
+   mismo material translucido y mismo backdrop-filter existente. */
+:root .composer-bar,
+:root .menu-sheet,
+:root .toast,
+:root .card-download,
+:root .player-download,
+:root .image-player-close,
+:root .video-player-close {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(var(--shared-control-bg),var(--shared-control-bg)) padding-box,
+    var(--material-edge-gradient) border-box;
+  box-shadow: var(--material-edge-shadow);
+}
+
+/* El menú conserva su propio tinte según el tema. */
+:root .menu-sheet {
+  background:
+    linear-gradient(rgba(23,23,26,.60),rgba(23,23,26,.60)) padding-box,
+    var(--material-edge-gradient) border-box;
+}
+:root[data-theme="light"] .menu-sheet {
+  background:
+    linear-gradient(rgba(252,252,255,.78),rgba(252,252,255,.78)) padding-box,
+    var(--material-edge-gradient) border-box;
+}
+
+/* Tarjetas y barras solidas: mismo borde de material, sin cambiar
+   su color base ni convertir todos los fondos a cristal. */
+:root .initial-loader,
+:root .status-bar,
+:root .empty-actions,
+:root .confirm-dialog {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(var(--md-surface),var(--md-surface)) padding-box,
+    var(--material-edge-gradient) border-box;
+  box-shadow: var(--material-edge-inset);
+}
+:root .confirm-dialog {
+  box-shadow: 0 12px 35px var(--shadow-soft), var(--material-edge-inset);
+}
+
+/* Contorno sobre la miniatura: la imagen sigue a sangre y el
+   borde es un reflejo óptico no interactivo, nunca una máscara. */
+.media-card::before {
+  content: "";
+  position: absolute;
+  z-index: 8;
+  inset: 0;
+  padding: 1px;
+  pointer-events: none;
+  border-radius: inherit;
+  background: var(--material-edge-gradient);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  opacity: .74;
+}
+
+/* El indicador activo comparte el reflejo interior del dock,
+   sin crear un segundo anillo ni alterar su animación. */
+.media-dock::before {
+  box-shadow: var(--material-edge-inset);
+}
+
+/* Paneles de información sobre foto/video: ribete superior
+   suave que los separa del contenido sin cerrar todo el borde. */
+:root .video-player-info,
+:root .image-player-info {
+  border-top: 1px solid var(--material-rim-side);
+  box-shadow: var(--shared-control-shadow), inset 0 1px 0 var(--material-inner-glow);
+}
+
+/* Respetar estilos de estados interactivos sin borrar el ribete. */
+:root .card-download:hover,
+:root .card-download:focus-visible,
+:root .player-download:hover,
+:root .image-player-close:hover,
+:root .video-player-close:hover {
+  background:
+    linear-gradient(var(--shared-control-bg),var(--shared-control-bg)) padding-box,
+    var(--material-edge-gradient) border-box;
+}
+
+@media (forced-colors: active) {
+  :root .composer-bar,
+  :root .menu-sheet,
+  :root .toast,
+  :root .card-download,
+  :root .player-download,
+  :root .image-player-close,
+  :root .video-player-close,
+  :root .initial-loader,
+  :root .status-bar,
+  :root .empty-actions,
+  :root .confirm-dialog {
+    border: 1px solid CanvasText;
+    background: Canvas;
+    box-shadow: none;
+  }
+  .media-card::before { display: none; }
+}
+
+/* Evitar que el override de tema claro restaure el contorno plano. */
+:root[data-theme="light"] .composer-bar,
+:root[data-theme="light"] .menu-sheet {
+  border-color: transparent;
+}
+
+/* Menú emergente y pequeños controles del reproductor embebido. */
+:root .video-player-more-menu,
+:root .video-control-button {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(rgba(23,23,26,.60),rgba(23,23,26,.60)) padding-box,
+    var(--material-edge-gradient) border-box;
+  box-shadow: var(--material-edge-inset);
+}
+:root .video-control-button:hover,
+:root .video-control-button:focus-visible,
+:root .video-control-button:active {
+  background:
+    linear-gradient(rgba(61,61,61,.70),rgba(61,61,61,.70)) padding-box,
+    var(--material-edge-gradient) border-box;
+}
+@media (forced-colors: active) {
+  :root .video-player-more-menu,
+  :root .video-control-button { border: 1px solid CanvasText; background: Canvas; box-shadow: none; }
+}

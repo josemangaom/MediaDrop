@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <meta name="referrer" content="no-referrer">
+    <title>MediaDrop</title>
+    <!-- UI universal · MediaDrop -->
+    <link rel="stylesheet" href="sidepanel.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <main class="content-shell">
+        <h1 class="media-section-title" id="media-section-title">Fotos</h1>
+
+        <div class="initial-loader" id="initial-loader" role="status" aria-live="polite">
+          <span class="loader-spinner" aria-hidden="true"></span>
+          <div>
+            <strong>Detectando contenido…</strong>
+            <span>Analizando la pestaña activa</span>
+          </div>
+        </div>
+
+        <section class="status-bar" aria-label="Estado">
+          <div class="live-status" id="live-status">
+            <span class="live-dot" aria-hidden="true"></span>
+            <span id="status-text">Detectando en vivo · 0 imágenes</span>
+          </div>
+          <button class="all-pill" id="status-download-all" type="button" disabled>
+            <span>Todo</span>
+          </button>
+        </section>
+
+        <section class="empty-actions" id="empty-actions" aria-label="Acciones rápidas">
+          <button class="empty-action" id="quick-images" type="button">
+            <span class="empty-action-icon" aria-hidden="true">
+              <svg viewBox="0 -960 960 960" fill="currentColor">
+                <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm40-80h480L570-480 450-320l-90-120-120 160Zm-40 80v-560 560Z"/>
+              </svg>
+            </span>
+            <span>Ver imágenes</span>
+          </button>
+          <button class="empty-action" id="quick-videos" type="button">
+            <span class="empty-action-icon" aria-hidden="true">
+              <svg viewBox="0 -960 960 960" fill="currentColor">
+                <path d="m160-800 80 160h120l-80-160h80l80 160h120l-80-160h80l80 160h120l-80-160h120q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800Zm0 240v320h640v-320H160Zm0 0v320-320Z"/>
+              </svg>
+            </span>
+            <span>Ver videos</span>
+          </button>
+          <button class="empty-action" id="quick-rescan" type="button">
+            <span class="empty-action-icon" aria-hidden="true">
+              <svg viewBox="0 -960 960 960" fill="currentColor">
+                <path d="M480-160q-134 0-227-93t-93-227q0-134 93-227t227-93q69 0 132 28.5T720-690v-110h80v280H520v-80h168q-32-56-87.5-88T480-720q-100 0-170 70t-70 170q0 100 70 170t170 70q77 0 139-44t87-116h84q-28 106-114 173t-196 67Z"/>
+              </svg>
+            </span>
+            <span>Volver a escanear</span>
+          </button>
+        </section>
+
+        <section id="media-content" aria-live="polite"></section>
+      </main>
+
+      <nav class="composer-bar utility-dock" aria-label="Controles de apariencia y actualización">
+        <button
+          class="dock-button theme-toggle dock-theme-button"
+          id="theme-button"
+          type="button"
+          aria-label="Cambiar a modo claro"
+          title="Cambiar a modo claro"
+        >
+          <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2"></path>
+            <path d="M12 20v2"></path>
+            <path d="m4.93 4.93 1.41 1.41"></path>
+            <path d="m17.66 17.66 1.41 1.41"></path>
+            <path d="M2 12h2"></path>
+            <path d="M20 12h2"></path>
+            <path d="m6.34 17.66-1.41 1.41"></path>
+            <path d="m19.07 4.93-1.41 1.41"></path>
+          </svg>
+          <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20.2 15.2A8.5 8.5 0 0 1 8.8 3.8a8.5 8.5 0 1 0 11.4 11.4Z"></path>
+          </svg>
+        </button>
+        <button
+          class="dock-button dock-rescan-button"
+          id="rescan-button"
+          type="button"
+          aria-label="Volver a escanear"
+          title="Volver a escanear"
+        >
+          <span class="utility-icon utility-icon-refresh" aria-hidden="true"></span>
+        </button>
+      </nav>
+
+      <nav class="composer-bar media-dock" aria-label="Navegación principal">
+        <button
+          class="dock-button media-tab"
+          id="dock-videos-tab"
+          type="button"
+          data-tab="video"
+          aria-selected="false"
+          aria-label="Videos"
+          title="Videos"
+        >
+          <span class="dock-icon dock-icon-video" aria-hidden="true"></span>
+        </button>
+        <button
+          class="dock-button media-tab is-active"
+          id="dock-photos-tab"
+          type="button"
+          data-tab="image"
+          aria-selected="true"
+          aria-label="Fotos"
+          title="Fotos"
+        >
+          <span class="dock-icon dock-icon-photos" aria-hidden="true"></span>
+        </button>
+        <button
+          class="dock-button dock-settings"
+          id="composer-menu-button"
+          type="button"
+          aria-label="Ajustes"
+          title="Ajustes"
+          aria-haspopup="menu"
+          aria-controls="app-menu"
+          aria-expanded="false"
+        >
+          <span class="dock-icon dock-icon-settings" aria-hidden="true"></span>
+        </button>
+      </nav>
+    </div>
+
+    <div class="menu-popover" id="app-menu" role="menu" aria-label="Acciones de MediaDrop" hidden>
+      <div class="menu-sheet">
+        <button class="menu-item" id="menu-download-all" type="button" role="menuitem">
+          <span class="menu-item-icon" aria-hidden="true"><img src="../../assets/menu-download-all.svg" alt="" /></span>
+          <span>Descargar todo</span>
+        </button>
+<button class="menu-item" id="menu-clear" type="button" role="menuitem">
+          <span class="menu-item-icon" aria-hidden="true"><img src="../../assets/menu-clear-results.svg" alt="" /></span>
+          <span>Limpiar resultados</span>
+        </button>
+        <button class="menu-item menu-toggle" id="menu-hover-toggle" type="button" role="menuitemcheckbox" aria-checked="true">
+          <span class="menu-item-icon" aria-hidden="true"><img src="../../assets/menu-hover-icon.svg" alt="" /></span>
+          <span class="menu-toggle-copy">
+            <span>Icono al pasar el mouse</span>
+            <small>Mostrar botón sobre fotos y videos</small>
+          </span>
+          <span class="switch-control" aria-hidden="true">
+            <span class="switch-thumb"></span>
+          </span>
+        </button>
+</div>
+    </div>
+
+    <div class="video-player-backdrop" id="video-player-backdrop" hidden>
+      <section
+        class="video-player-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="video-player-title"
+      >
+        <div class="video-player-stage">
+          <video
+            class="video-player-element"
+            id="video-player-element"
+            playsinline
+            preload="metadata"
+          ></video>
+
+          <button class="video-player-center-toggle" id="video-player-center-toggle" type="button" aria-label="Reproducir" title="Reproducir">
+            <svg class="video-center-icon video-center-icon-play" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M9 6.4v11.2l8.8-5.6Z"></path>
+            </svg>
+            <svg class="video-center-icon video-center-icon-pause" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7.4 6.2h3.3v11.6H7.4zM13.3 6.2h3.3v11.6h-3.3z"></path>
+            </svg>
+          </button>
+
+          <div class="video-player-controls" id="video-player-controls" hidden>
+            <div class="video-player-progress-row">
+              <input
+                class="video-player-progress"
+                id="video-player-progress"
+                type="range"
+                min="0"
+                max="1000"
+                value="0"
+                step="1"
+                aria-label="Posición del video"
+              >
+            </div>
+
+            <div class="video-player-control-row">
+              <button class="video-control-button" id="video-player-play" type="button" aria-label="Reproducir" title="Reproducir">
+                <svg class="video-icon video-icon-play" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M8 5.5v13l10-6.5Z"></path>
+                </svg>
+                <svg class="video-icon video-icon-pause" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M7 5h4v14H7zM13 5h4v14h-4z"></path>
+                </svg>
+              </button>
+
+              <button class="video-control-button" id="video-player-volume" type="button" aria-label="Silenciar" title="Silenciar">
+                <svg class="video-icon video-icon-volume" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 10v4h4l5 4V6L8 10H4Z"></path>
+                  <path d="M16 9.2a4 4 0 0 1 0 5.6"></path>
+                  <path d="M18.6 6.8a7.5 7.5 0 0 1 0 10.4"></path>
+                </svg>
+                <svg class="video-icon video-icon-muted" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 10v4h4l5 4V6L8 10H4Z"></path>
+                  <path d="m17 9 4 4m0-4-4 4"></path>
+                </svg>
+              </button>
+
+              <input
+                class="video-player-volume-slider"
+                id="video-player-volume-slider"
+                type="range"
+                min="0"
+                max="1"
+                value="1"
+                step="0.01"
+                aria-label="Volumen"
+              >
+
+              <span class="video-player-time" id="video-player-time">0:00 / 0:00</span>
+
+              <span class="video-player-control-spacer"></span>
+
+              <button class="video-control-button" id="video-player-pip" type="button" aria-label="Imagen en imagen" title="Imagen en imagen">
+                <svg class="video-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="3.5" y="5" width="17" height="14" rx="2"></rect>
+                  <rect x="11.5" y="11" width="7" height="5" rx="1"></rect>
+                </svg>
+              </button>
+
+              <button class="video-control-button" id="video-player-fullscreen" type="button" aria-label="Pantalla completa" title="Pantalla completa">
+                <svg class="video-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M8 4H4v4M16 4h4v4M8 20H4v-4M16 20h4v-4"></path>
+                </svg>
+              </button>
+
+              <div class="video-player-more-wrap">
+                <button class="video-control-button video-player-speed-button" id="video-player-more" type="button" aria-label="Velocidad de reproducción" title="Velocidad de reproducción" aria-expanded="false">
+                  <span class="video-player-speed-label" id="video-player-speed-label">1×</span>
+                </button>
+                <div class="video-player-more-menu" id="video-player-more-menu" hidden>
+                  <button type="button" data-video-action="speed" data-video-speed="0.5">Velocidad 0.5×</button>
+                  <button type="button" data-video-action="speed" data-video-speed="1">Velocidad normal</button>
+                  <button type="button" data-video-action="speed" data-video-speed="1.5">Velocidad 1.5×</button>
+                  <button type="button" data-video-action="speed" data-video-speed="2">Velocidad 2×</button>
+                  <div class="video-player-more-divider"></div>
+                  <button type="button" data-video-action="download">Descargar video</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="video-player-fallback" id="video-player-fallback" hidden>
+            <span class="video-player-fallback-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <rect x="3" y="4" width="18" height="16" rx="3"></rect>
+                <path d="m10 9 5 3-5 3Z"></path>
+              </svg>
+            </span>
+            <strong>Vista previa no disponible</strong>
+            <span>MediaDrop detectó el video, pero esta fuente no puede reproducirse directamente en el flyout.</span>
+          </div>
+          <button class="video-player-close" id="video-player-close" type="button" aria-label="Cerrar reproductor" title="Cerrar reproductor">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m7 7 10 10"></path>
+              <path d="m17 7-10 10"></path>
+            </svg>
+          </button>
+        </div>
+        <div class="video-player-info">
+          <div class="video-player-copy">
+            <p class="video-player-title" id="video-player-title">Video</p>
+            <div class="video-player-details" id="video-player-details"></div>
+          </div>
+          <button class="player-download" id="video-player-download" type="button" aria-label="Descargar video">
+            <svg viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M440-800v487L216-537l-56 57 320 320 320-320-56-57-224 224v-487h-80Z"/></svg>
+          </button>
+        </div>
+      </section>
+    </div>
+
+
+
+    <div class="image-player-backdrop" id="image-player-backdrop" hidden>
+      <section
+        class="image-player-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="image-player-title"
+      >
+        <div class="image-player-stage">
+          <img
+            class="image-player-element"
+            id="image-player-element"
+            alt=""
+            hidden
+          >
+          <div class="image-player-fallback" id="image-player-fallback" hidden>
+            <span class="image-player-fallback-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <rect x="3" y="4" width="18" height="16" rx="3"></rect>
+                <path d="m5.5 18 4.7-4.8 3.1 3.1 2.1-2.1 3.1 3.8"></path>
+              </svg>
+            </span>
+            <strong>Vista previa no disponible</strong>
+            <span>MediaDrop detectó la imagen, pero esta fuente no puede mostrarse directamente en el flyout.</span>
+          </div>
+          <button class="image-player-close" id="image-player-close" type="button" aria-label="Cerrar vista previa" title="Cerrar vista previa">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m7 7 10 10"></path>
+              <path d="m17 7-10 10"></path>
+            </svg>
+          </button>
+        </div>
+        <div class="image-player-info">
+          <div class="image-player-copy">
+            <p class="image-player-title" id="image-player-title">Imagen</p>
+            <div class="image-player-details" id="image-player-details"></div>
+          </div>
+          <button class="player-download" id="image-player-download" type="button" aria-label="Descargar imagen">
+            <svg viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true"><path d="M440-800v487L216-537l-56 57 320 320 320-320-56-57-224 224v-487h-80Z"/></svg>
+          </button>
+        </div>
+      </section>
+    </div>
+
+    <div class="dialog-backdrop" id="bulk-dialog" hidden>
+      <section
+        class="confirm-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="bulk-dialog-title"
+        aria-describedby="bulk-dialog-message"
+      >
+        <span class="dialog-icon" aria-hidden="true">
+          <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M640-480v-80h80v80h-80Zm0 80h-80v-80h80v80Zm0 80v-80h80v80h-80ZM447-640l-80-80H160v480h400v-80h80v80h160v-400H640v80h-80v-80H447ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Zm0-80v-480 480Z"/></svg>
+        </span>
+        <h2 id="bulk-dialog-title">¿Descargar todo?</h2>
+        <p id="bulk-dialog-message"></p>
+        <div class="dialog-actions">
+          <button class="dialog-button secondary" id="bulk-cancel" type="button">Cancelar</button>
+          <button class="dialog-button primary" id="bulk-confirm" type="button">Descargar</button>
+        </div>
+      </section>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="sidepanel.js"></script>
+  </body>
+</html>

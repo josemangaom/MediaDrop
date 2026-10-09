@@ -1,0 +1,534 @@
+/* ===== TIPOGRAFÍA OFICIAL · ONE UI SANS ===== */
+@font-face {
+  font-family: "One UI Sans APP VF";
+  src: local("One UI Sans APP VF"), local("One UI Sans Variable"), local("One UI Sans");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SamsungOne";
+  src: local("SamsungOne 400"), local("SamsungOne-400"), local("SamsungOne");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SamsungOne";
+  src: local("SamsungOne 700"), local("SamsungOne-700"), local("SamsungOne");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: dark;
+  font-family: "One UI Sans APP VF", "One UI Sans", "SamsungOne", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #000;
+  color: #fff;
+}
+
+* { box-sizing: border-box; }
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: #000;
+}
+button, input { font: inherit; }
+
+.player-shell {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: #000;
+  isolation: isolate;
+}
+
+.player-video {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  background: #000;
+  cursor: pointer;
+}
+
+/* Igual que el reproductor embebido: sin orbe central antiguo. */
+.center-toggle { display: none !important; }
+
+.player-shell::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  height: 32%;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(0,0,0,0) 0%,
+    rgba(0,0,0,.06) 20%,
+    rgba(0,0,0,.34) 62%,
+    rgba(0,0,0,.68) 100%
+  );
+}
+
+/* Controles directamente sobre el video, sin cápsula glass. */
+.controls {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 5;
+  padding: 0 28px 24px;
+  border: 0;
+  border-radius: 0;
+  color: #fff;
+  background: transparent;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.progress-row {
+  width: 100%;
+  height: 8px;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  margin: 0 0 16px;
+}
+
+.progress,
+.volume-slider {
+  margin: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  border-radius: 999px;
+  outline: 0;
+  cursor: pointer;
+  background: linear-gradient(
+    to right,
+    #fff 0%,
+    #fff var(--range-progress, 0%),
+    rgba(255,255,255,.24) var(--range-progress, 0%),
+    rgba(255,255,255,.24) 100%
+  );
+}
+
+.progress {
+  width: 100%;
+  height: 4px;
+}
+
+.progress::-webkit-slider-thumb {
+  width: 0;
+  height: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  transition: width .12s ease, height .12s ease;
+}
+.progress:hover::-webkit-slider-thumb,
+.progress:focus-visible::-webkit-slider-thumb {
+  width: 8px;
+  height: 8px;
+}
+.progress::-moz-range-thumb {
+  width: 0;
+  height: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+}
+.progress:hover::-moz-range-thumb,
+.progress:focus-visible::-moz-range-thumb {
+  width: 8px;
+  height: 8px;
+}
+
+.control-row {
+  width: 100%;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Mantener funcionalidad interna, pero visualmente igual al player principal. */
+#play,
+#volume-slider,
+#pip,
+.title {
+  display: none !important;
+}
+
+.time {
+  order: 0;
+  flex: 0 0 auto;
+  margin: 0;
+  color: rgba(255,255,255,.88);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.01em;
+  white-space: nowrap;
+}
+
+.spacer {
+  order: 1;
+  flex: 1 1 auto;
+  min-width: 8px;
+}
+
+#volume { order: 2; }
+.more-wrap {
+  order: 3;
+  position: relative;
+  flex: 0 0 auto;
+}
+#fullscreen { order: 4; }
+
+.control-button {
+  position: relative;
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(255,255,255,.13);
+  border-radius: 8px;
+  background: rgba(120,84,46,.36);
+  color: #fff;
+  box-shadow: inset 0 1px rgba(255,255,255,.05);
+  cursor: pointer;
+  transition: background .12s ease, border-color .12s ease, transform .12s ease;
+}
+.control-button:hover,
+.control-button:focus-visible {
+  border-color: rgba(255,255,255,.20);
+  background: rgba(140,96,53,.44);
+}
+.control-button:active {
+  background: rgba(154,108,60,.48);
+  transform: scale(.96);
+}
+.control-button:disabled {
+  opacity: .42;
+  cursor: default;
+  transform: none;
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+  display: block;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.icon-play,
+.icon-pause {
+  fill: currentColor;
+  stroke: none;
+}
+
+/* Un solo icono de volumen a la vez. */
+.control-button .icon-volume,
+.control-button .icon-muted {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 16px;
+  height: 16px;
+}
+.control-button .icon-muted { display: none; }
+.player-shell:not(.is-muted) .control-button .icon-volume { display: block; }
+.player-shell:not(.is-muted) .control-button .icon-muted { display: none; }
+.player-shell.is-muted .control-button .icon-volume { display: none; }
+.player-shell.is-muted .control-button .icon-muted { display: block; }
+
+.speed-button {
+  width: 44px;
+  padding: 0 8px;
+}
+.speed-label {
+  display: block;
+  color: rgba(255,255,255,.88);
+  font-size: 11px;
+  font-weight: 650;
+  line-height: 1;
+  letter-spacing: -.02em;
+  white-space: nowrap;
+}
+
+.more-menu {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 8px);
+  z-index: 8;
+  width: 136px;
+  overflow: hidden;
+  padding: 4px;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 10px;
+  background: rgba(26,24,20,.94);
+  box-shadow: 0 12px 30px rgba(0,0,0,.34);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+.more-menu[hidden] { display: none; }
+.more-menu button {
+  width: 100%;
+  min-height: 29px;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #fff;
+  font-size: 10px;
+  text-align: left;
+  cursor: pointer;
+}
+.more-menu button:hover,
+.more-menu button:focus-visible {
+  background: rgba(255,255,255,.10);
+}
+.menu-divider {
+  height: 1px;
+  margin: 4px 5px;
+  background: rgba(255,255,255,.12);
+}
+
+.fallback {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  display: grid;
+  place-content: center;
+  gap: 8px;
+  padding: 24px;
+  color: rgba(255,255,255,.78);
+  text-align: center;
+  background: #090909;
+}
+.fallback[hidden] { display: none; }
+.fallback strong { color: #fff; font-size: 18px; }
+.fallback span { max-width: 540px; font-size: 13px; line-height: 1.5; }
+
+@media (max-width: 720px) {
+  .controls { padding: 0 16px 16px; }
+  .progress-row { margin-bottom: 12px; }
+  .control-row { height: 34px; gap: 7px; }
+  .control-button { width: 34px; height: 34px; }
+  .speed-button { width: 42px; }
+  .time { font-size: 11px; }
+}
+
+/* =========================================================
+   FULLSCREEN PLAYER · COMPACT FROST PASS
+   Mirrors the embedded player exactly: neutral frost, small icons,
+   compact lower controls and no colored fills.
+   ========================================================= */
+.controls {
+  padding: 0 22px 16px;
+}
+
+.progress-row {
+  height: 6px;
+  margin: 0 0 10px;
+}
+
+.progress {
+  height: 3px;
+}
+
+.progress:hover::-webkit-slider-thumb,
+.progress:focus-visible::-webkit-slider-thumb {
+  width: 6px;
+  height: 6px;
+}
+
+.progress:hover::-moz-range-thumb,
+.progress:focus-visible::-moz-range-thumb {
+  width: 6px;
+  height: 6px;
+}
+
+.control-row {
+  height: 30px;
+  gap: 6px;
+}
+
+.time {
+  font-size: 10.5px;
+  color: rgba(255,255,255,.86);
+}
+
+.control-button {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  border: 1px solid rgba(255,255,255,.13);
+  border-radius: 7px;
+  background: rgba(255,255,255,.025);
+  color: rgba(255,255,255,.92);
+  box-shadow: inset 0 1px rgba(255,255,255,.045);
+  -webkit-backdrop-filter: blur(16px) saturate(125%);
+  backdrop-filter: blur(16px) saturate(125%);
+}
+
+.control-button:hover,
+.control-button:focus-visible {
+  border-color: rgba(255,255,255,.20);
+  background: rgba(255,255,255,.045);
+  -webkit-backdrop-filter: blur(18px) saturate(125%);
+  backdrop-filter: blur(18px) saturate(125%);
+}
+
+.control-button:active {
+  background: rgba(255,255,255,.055);
+  transform: scale(.96);
+}
+
+.icon {
+  width: 13px;
+  height: 13px;
+  stroke-width: 1.65;
+}
+
+#volume .icon-volume,
+#volume .icon-muted {
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  inset: 50% auto auto 50%;
+  margin: 0;
+  transform: translate(-50%, -50%);
+}
+
+.player-shell:not(.is-muted) #volume .icon-volume { display: block !important; }
+.player-shell:not(.is-muted) #volume .icon-muted { display: none !important; }
+.player-shell.is-muted #volume .icon-volume { display: none !important; }
+.player-shell.is-muted #volume .icon-muted { display: block !important; }
+
+.speed-button {
+  width: 36px;
+  height: 30px;
+  padding: 0 6px;
+}
+
+.speed-label {
+  font-size: 10px;
+  color: rgba(255,255,255,.88);
+}
+
+.more-menu {
+  background: rgba(20,20,20,.18);
+  border-color: rgba(255,255,255,.13);
+  -webkit-backdrop-filter: blur(18px) saturate(125%);
+  backdrop-filter: blur(18px) saturate(125%);
+}
+
+@media (max-width: 720px) {
+  .controls { padding: 0 14px 12px; }
+  .progress-row { margin-bottom: 8px; }
+  .control-row { height: 28px; gap: 5px; }
+  .control-button { width: 28px; height: 28px; }
+  .speed-button { width: 34px; height: 28px; }
+  .icon,
+  #volume .icon-volume,
+  #volume .icon-muted { width: 12px; height: 12px; }
+  .time { font-size: 10px; }
+}
+
+/* One UI Design Kit · visual-only pass. Blur and geometry intentionally untouched. */
+:root {
+  font-family: "One UI Sans APP VF", "One UI Sans", "SamsungOne", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-feature-settings: "dlig" 1, "lnum" 1, "pnum" 1;
+}
+
+.control-button {
+  border-color: rgba(255,255,255,.13);
+  background: rgba(46, 46, 48, .60);
+  color: #FFFFFF;
+  box-shadow: 0 6px 18.9px rgba(0, 0, 0, .10);
+}
+
+.control-button:hover,
+.control-button:focus-visible,
+.control-button:active {
+  border-color: rgba(255,255,255,.20);
+  background: rgba(61, 61, 61, .70);
+}
+
+.more-menu {
+  border-color: rgba(255,255,255,.14);
+  border-radius: 28px;
+  background: rgba(23, 23, 26, .60);
+  box-shadow: 0 6px 18.9px rgba(0, 0, 0, .10);
+}
+
+.more-menu button:hover,
+.more-menu button:focus-visible {
+  background: rgba(61, 61, 61, .70);
+}
+
+.menu-divider {
+  background: #5F5F61;
+}
+
+
+
+/* One UI · Material edge compartido con el popup.
+   El reproductor completo mantiene su video sin recuadro. */
+:root {
+  --player-material-rim: linear-gradient(155deg,
+    rgba(255,255,255,.31), rgba(255,255,255,.13) 25%,
+    rgba(255,255,255,.055) 75%, rgba(255,255,255,.13));
+  --player-material-fill: rgba(46,46,48,.60);
+}
+.control-button {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(var(--player-material-fill),var(--player-material-fill)) padding-box,
+    var(--player-material-rim) border-box;
+  box-shadow: 0 6px 18.9px rgba(0,0,0,.10),
+    inset 0 1px 0 rgba(255,255,255,.095),
+    inset 0 -1px 0 rgba(0,0,0,.16);
+}
+.control-button:hover,
+.control-button:focus-visible,
+.control-button:active {
+  background:
+    linear-gradient(rgba(61,61,61,.70),rgba(61,61,61,.70)) padding-box,
+    var(--player-material-rim) border-box;
+}
+.more-menu {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(rgba(23,23,26,.60),rgba(23,23,26,.60)) padding-box,
+    var(--player-material-rim) border-box;
+  box-shadow: 0 6px 18.9px rgba(0,0,0,.10),
+    inset 0 1px 0 rgba(255,255,255,.095),
+    inset 0 -1px 0 rgba(0,0,0,.16);
+}
+@media (forced-colors: active) {
+  .control-button,.more-menu { border: 1px solid CanvasText; background: Canvas; box-shadow: none; }
+}

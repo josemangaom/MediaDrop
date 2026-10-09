@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="dark">
+    <title>MediaDrop · Reproductor</title>
+    <link rel="stylesheet" href="fullscreen-player.css">
+  </head>
+  <body>
+    <main class="player-shell" id="player-shell">
+      <video class="player-video" id="player-video" playsinline preload="metadata"></video>
+
+      <button class="center-toggle" id="center-toggle" type="button" aria-label="Reproducir" title="Reproducir">
+        <svg class="center-icon center-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6.4v11.2l8.8-5.6Z"></path></svg>
+        <svg class="center-icon center-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.4 6.2h3.3v11.6H7.4zM13.3 6.2h3.3v11.6h-3.3z"></path></svg>
+      </button>
+
+      <div class="controls" id="controls">
+        <div class="progress-row">
+          <input class="progress" id="progress" type="range" min="0" max="1000" value="0" step="1" aria-label="Posición del video">
+        </div>
+
+        <div class="control-row">
+          <button class="control-button" id="play" type="button" aria-label="Reproducir" title="Reproducir">
+            <svg class="icon icon-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10-6.5Z"></path></svg>
+            <svg class="icon icon-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z"></path></svg>
+          </button>
+
+          <button class="control-button" id="volume" type="button" aria-label="Silenciar" title="Silenciar">
+            <svg class="icon icon-volume" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 10v4h4l5 4V6L8 10H4Z"></path><path d="M16 9.2a4 4 0 0 1 0 5.6"></path><path d="M18.6 6.8a7.5 7.5 0 0 1 0 10.4"></path>
+            </svg>
+            <svg class="icon icon-muted" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h4l5 4V6L8 10H4Z"></path><path d="m17 9 4 4m0-4-4 4"></path></svg>
+          </button>
+
+          <input class="volume-slider" id="volume-slider" type="range" min="0" max="1" value="1" step="0.01" aria-label="Volumen">
+          <span class="time" id="time">0:00 / 0:00</span>
+          <span class="spacer"></span>
+
+          <span class="title" id="title">Video</span>
+
+          <span class="spacer"></span>
+
+          <button class="control-button" id="pip" type="button" aria-label="Imagen en imagen" title="Imagen en imagen">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="14" rx="2"></rect><rect x="11.5" y="11" width="7" height="5" rx="1"></rect></svg>
+          </button>
+
+          <button class="control-button" id="fullscreen" type="button" aria-label="Salir de pantalla completa" title="Salir de pantalla completa">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 9H4V4M15 9h5V4M9 15H4v5M15 15h5v5"></path></svg>
+          </button>
+
+          <div class="more-wrap">
+            <button class="control-button speed-button" id="more" type="button" aria-label="Velocidad de reproducción" title="Velocidad de reproducción" aria-expanded="false">
+              <span class="speed-label" id="speed-label">1×</span>
+            </button>
+            <div class="more-menu" id="more-menu" hidden>
+              <button type="button" data-action="speed" data-speed="0.5">Velocidad 0.5×</button>
+              <button type="button" data-action="speed" data-speed="1">Velocidad normal</button>
+              <button type="button" data-action="speed" data-speed="1.5">Velocidad 1.5×</button>
+              <button type="button" data-action="speed" data-speed="2">Velocidad 2×</button>
+              <div class="menu-divider"></div>
+              <button type="button" data-action="download">Descargar video</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fallback" id="fallback" hidden>
+        <strong>Vista previa no disponible</strong>
+        <span>No fue posible abrir este video en el reproductor de pantalla completa.</span>
+      </div>
+    </main>
+    <script src="fullscreen-player.js"></script>
+  </body>
+</html>
